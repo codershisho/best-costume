@@ -37,3 +37,14 @@ npm i vue-tsc -D
 ```
 
 - nginx にデプロイする方法はまだ未対応
+
+### local
+
+1. docker の.env のコピー
+   1. プロジェクト名を書き換え
+2. docker 起動
+3. laravel
+   1. composer install
+   2. .env のコピー
+4. nuxt
+   1. npm i
