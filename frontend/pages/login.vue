@@ -13,13 +13,28 @@
         class="w-100 !tw-h-12"
         color="blue-accent-3"
         text="Sign in"
+        @click="authStore.login"
+      ></base-button>
+      <base-button
+        class="w-100 !tw-h-12"
+        color="blue-accent-3"
+        text="test"
+        @click="test"
       ></base-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '../stores/auth';
+
 definePageMeta({
   layout: 'login',
 });
+
+const authStore = useAuthStore();
+
+async function test() {
+  const res = await useApiFetch('/api/user');
+}
 </script>
