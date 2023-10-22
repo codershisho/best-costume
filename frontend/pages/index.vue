@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <p class="tw-font-bold tw-text-2xl">Sample</p>
+    <p class="tw-font-bold tw-text-2xl">Samplse</p>
     <v-btn color="primary">buttons</v-btn>
   </div>
 </template>
