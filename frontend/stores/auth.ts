@@ -7,6 +7,11 @@ export const useAuthStore = defineStore('auth', {
     _user: null,
   }),
 
+  getters: {
+    isAuth: (state) => state._isAuth,
+    user: (state) => state._user,
+  },
+
   actions: {
     async login(credentials) {
       // if(this._isAuth) {
@@ -25,12 +30,21 @@ export const useAuthStore = defineStore('auth', {
         if (status.value === 'success') {
           this._isAuth = true;
           this._user = data.value;
-          // TODO ホーム画面に遷移 or 呼び出しもとで遷移
+          navigateTo('/');
         }
       }
     },
 
-    // TODO logout処理追加
+    async logout() {
+      const { data, status } = await useApiFetch('/api/auth/logout', {
+        method: 'post',
+      });
+
+      if (status.value === 'success') {
+        this.authClear();
+        navigateTo('/login');
+      }
+    },
 
     authClear() {
       this._isAuth = false;
