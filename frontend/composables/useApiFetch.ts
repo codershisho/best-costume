@@ -37,11 +37,12 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
     onResponseError({ request, response, options }) {
       // Handle the response errors
       console.error(response.status);
-      if (response.status === 401) {
+      if (response.status === 401 || response.status === 419) {
         const authStore = useAuthStore();
         authStore.authClear();
         alert('認証切れです。ログイン画面に遷移します。');
         // TODO ログイン画面へ遷移処理
+        navigateTo('/login');
       }
     },
   });
