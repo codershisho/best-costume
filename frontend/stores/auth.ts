@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia';
 import { useApiFetch } from '~/composables/useApiFetch';
 
+type Credentials = {
+  name?: String;
+  password?: String;
+};
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     _isAuth: false,
@@ -13,16 +18,11 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(credentials) {
-      // if(this._isAuth) {
-      // }
+    async login(credentials?: Credentials) {
       await useApiFetch('/api/sanctum/csrf-cookie');
       const { data, status } = await useApiFetch('/api/auth/login', {
         method: 'post',
-        body: {
-          email: 'admin@example.com',
-          password: 'hogehoge',
-        },
+        body: credentials,
       });
 
       if (status.value === 'success') {

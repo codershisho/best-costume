@@ -28,7 +28,7 @@ final class LoginController extends Controller
     public function __invoke(LoginRequest $request): JsonResponse
     {
         // リクエストからemailとpasswordの値を取得
-        $credentials = $request->only(['email', 'password']);
+        $credentials = $request->only(['name', 'password']);
 
         // 認証開始
         if ($this->auth->guard()->attempt($credentials)) {

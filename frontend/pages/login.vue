@@ -6,14 +6,14 @@
         Customer Costume Selection Application
       </div>
       <div class="tw-mt-10 tw-text-xl">User Name</div>
-      <base-text></base-text>
+      <base-text v-model="credentials.name"></base-text>
       <div class="tw-text-xl">Password</div>
-      <base-text></base-text>
+      <base-text v-model="credentials.password"></base-text>
       <base-button
         class="w-100 !tw-h-12"
         color="blue-accent-3"
         text="Sign in"
-        @click="authStore.login"
+        @click="onLogin"
       ></base-button>
     </div>
   </div>
@@ -24,5 +24,19 @@ definePageMeta({
   layout: 'login',
 });
 
+type Credentials = {
+  name?: String;
+  password?: String;
+};
+
 const authStore = useAuthStore();
+
+const credentials = ref<Credentials>({
+  name: '',
+  password: '',
+});
+
+async function onLogin() {
+  await authStore.login(credentials.value);
+}
 </script>
