@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\WebScraping;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Http\Request;
@@ -24,6 +25,10 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('bc')->group(function () {
+    Route::get('scrape', [WebScraping::class, 'scrape']);
 });
 
 Route::get('/sample', function () {
