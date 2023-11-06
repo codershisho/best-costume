@@ -12,7 +12,7 @@
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="bg-back">
+    <v-main class="bg-back !tw-pt-10">
       <v-container>
         <slot />
       </v-container>
