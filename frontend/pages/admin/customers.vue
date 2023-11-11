@@ -42,7 +42,9 @@
             </v-chip>
           </td>
           <td>
-            <v-icon color="#90A4AE">mdi-page-next-outline</v-icon>
+            <v-icon color="#90A4AE" @click="jump(customer)"
+              >mdi-page-next-outline</v-icon
+            >
           </td>
         </tr>
       </tbody>
@@ -75,6 +77,10 @@ async function searchCustomers() {
 async function searhStatus() {
   const { data } = await useApiFetch('/api/bc/master/statuses');
   statuses.value = data.value;
+}
+
+function jump(customer) {
+  navigateTo('/customer/' + customer.id);
 }
 
 // TODO 行クリック⇒詳細情報ページ
