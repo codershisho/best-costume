@@ -2,7 +2,7 @@
   <div class="d-flex">
     <div>顧客リスト</div>
     <v-spacer></v-spacer>
-    <dialog-customer></dialog-customer>
+    <dialog-customer @close="search"></dialog-customer>
   </div>
   <div class="mt-3">
     <v-sheet class="mb-3 pl-3 rounded-lg">
@@ -61,9 +61,13 @@ const customers = ref<Customer[]>();
 const statuses = ref();
 
 search();
-searhStatus();
 
 async function search() {
+  searchCustomers();
+  searhStatus();
+}
+
+async function searchCustomers() {
   const { data } = await useApiFetch('/api/bc/admin/customers');
   customers.value = data.value;
 }
