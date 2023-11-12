@@ -34,6 +34,7 @@ Route::prefix('bc')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::prefix('customers')->group(function () {
             Route::get('/', [Customer::class, 'index']);
+            Route::get('/search', [Customer::class, 'search']);
             Route::post('/', [Customer::class, 'store']);
         });
     });

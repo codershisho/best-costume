@@ -30,10 +30,10 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
       ...headers,
       ...options?.headers,
     },
-    onResponse({ request, response, options }) {
-      // Process the response data
-      return response._data;
-    },
+    // onResponse({ request, response, options }) {
+    //   // Process the response data
+    //   return response._data;
+    // },
     onResponseError({ request, response, options }) {
       // Handle the response errors
       console.error(response.status);

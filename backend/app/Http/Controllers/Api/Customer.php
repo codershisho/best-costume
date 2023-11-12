@@ -13,13 +13,31 @@ class Customer extends Controller
     /**
      * 顧客一覧を返す
      *
+     * @return void
+     */
+    public function index()
+    {
+        $data = MCustomer::with('status')->paginate(10);
+        return CustomerResource::collection($data);
+    }
+
+    /**
+     * 検索条件に合致したデータを検索
+     *
      * @param Request $request
      * @return void
      */
-    public function index(Request $request)
+    public function search(Request $request)
     {
-        $data = MCustomer::with('status')->get();
-        return response()->json(CustomerResource::collection($data));
+        $q = MCustomer::query();
+        if ($request->has('name')) {
+            $q->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->has('status_id')) {
+            $q->where('status_id', $request->status_id);
+        }
+        $data = $q->with('status')->paginate(10);
+        return CustomerResource::collection($data);
     }
 
     /**
