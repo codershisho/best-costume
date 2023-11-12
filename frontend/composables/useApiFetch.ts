@@ -6,6 +6,7 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
   let headers: any = {
     accept: 'application/json',
     'Content-type': 'application/json',
+    'content-type': 'multipart/form-data',
   };
 
   const token = useCookie('XSRF-TOKEN');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Album;
 use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
@@ -36,6 +37,9 @@ Route::prefix('bc')->group(function () {
             Route::get('/', [Customer::class, 'index']);
             Route::get('/search', [Customer::class, 'search']);
             Route::post('/', [Customer::class, 'store']);
+        });
+        Route::prefix('albums')->group(function () {
+            Route::post('/upload', [Album::class, 'upload']);
         });
     });
 
