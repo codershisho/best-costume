@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
         if (status.value === 'success') {
           this._isAuth = true;
           this._user = data.value;
-          navigateTo('/');
+          navigateTo('/admin/home');
         }
       }
     },

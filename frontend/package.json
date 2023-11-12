@@ -23,6 +23,7 @@
     "@pinia/nuxt": "^0.5.1",
     "pinia": "^2.1.7",
     "sass": "^1.68.0",
+    "sweetalert2": "^11.9.0",
     "vuetify": "^3.4.0-alpha.1"
   },
   "overrides": {

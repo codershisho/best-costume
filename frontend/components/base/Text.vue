@@ -5,6 +5,7 @@
     variant="solo-filled"
     flat
     density="compact"
+    hide-details="auto"
   >
   </v-text-field>
 </template>
