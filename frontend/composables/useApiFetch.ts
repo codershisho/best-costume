@@ -18,7 +18,7 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
   }
 
   const defaultOptions: UseFetchOptions<T> = {
-    baseURL: config.public.apiBaseURL,
+    baseURL: 'http://localhost:8000',
     credentials: 'include',
     watch: false,
     headers: {

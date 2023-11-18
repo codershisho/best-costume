@@ -24,6 +24,7 @@ class FileCategory extends Model
         foreach ($files as $file) {
             $fileName = uniqid() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('public/uploads', $fileName);
+            $filePath = str_replace('public/', '', $filePath);
 
             self::create([
                 'file_path' => $filePath,
