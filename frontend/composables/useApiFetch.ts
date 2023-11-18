@@ -3,46 +3,40 @@ import type { UseFetchOptions } from 'nuxt/app';
 
 export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
   const config = useRuntimeConfig();
-  let headers: any = {
+  const headers: Record<string, string> = {
     accept: 'application/json',
-    'Content-type': 'application/json',
-    'content-type': 'multipart/form-data',
   };
 
   const token = useCookie('XSRF-TOKEN');
 
   if (token.value) {
-    headers['X-XSRF-TOKEN'] = token.value as string;
+    headers['X-XSRF-TOKEN'] = token.value;
   }
 
   if (process.server) {
-    headers = {
-      ...headers,
-      ...useRequestHeaders(['Referer', 'Cookie']),
-    };
+    Object.assign(headers, useRequestHeaders(['Referer', 'Cookie']));
   }
 
-  return useFetch(path, {
+  const defaultOptions: UseFetchOptions<T> = {
     baseURL: config.public.apiBaseURL,
     credentials: 'include',
     watch: false,
-    ...options,
     headers: {
       ...headers,
-      ...options?.headers,
+      ...(options.headers || {}),
     },
-    // onResponse({ request, response, options }) {
-    //   // Process the response data
-    //   return response._data;
-    // },
-    onResponseError({ request, response, options }) {
-      // Handle the response errors
+    ...options,
+  };
+
+  return useFetch(path, {
+    ...defaultOptions,
+    onResponseError({ response }) {
       console.error(response.status);
-      if (response.status === 401 || response.status === 419) {
+      if ([401, 419].includes(response.status)) {
         const authStore = useAuthStore();
         authStore.authClear();
         alert('認証切れです。ログイン画面に遷移します。');
-        // TODO ログイン画面へ遷移処理
+        // ログイン画面への遷移処理はあなたのナビゲーションライブラリによって置き換えてください
         navigateTo('/login');
       }
     },

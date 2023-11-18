@@ -40,6 +40,7 @@ Route::prefix('bc')->group(function () {
             Route::post('/', [Customer::class, 'store']);
         });
         Route::prefix('albums')->group(function () {
+            Route::get('/uploaded', [Album::class, 'index']);
             Route::post('/upload', [Album::class, 'upload']);
         });
     });
