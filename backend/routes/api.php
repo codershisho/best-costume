@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Album;
 use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
+use App\Http\Controllers\Api\Category;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ Route::prefix('bc')->group(function () {
         Route::prefix('statuses')->group(function () {
             Route::get('/', [Status::class, 'index']);
         });
+        Route::apiResource('categories', Category::class);
     });
 
     Route::get('scrape', [WebScraping::class, 'scrape']);

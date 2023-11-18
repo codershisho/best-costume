@@ -9,14 +9,23 @@ class Album extends Controller
 {
     public function upload(Request $request)
     {
-        Logger("aaaa");
-        Logger($request->all());
-        $files = $request->file('file');
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
 
-        logger($files);
-        // foreach ($files as $index => $file) {
-        //     $fileName = $file->getClientOriginalName();
-        //     $file->storeAS('public', $fileName);
-        // }
+            foreach ($files as $file) {
+                // ファイルを保存するディレクトリパスを指定します
+                $path = storage_path('app/public/uploads');
+
+                // ファイル名を一意にするための処理を行います
+                $fileName = uniqid() . '_' . $file->getClientOriginalName();
+
+                // ファイルを指定したパスに保存します
+                $file->move($path, $fileName);
+            }
+
+            return response()->json(['message' => 'ファイルがアップロードされました'], 200);
+        }
+
+        return response()->json(['message' => 'アップロードされたファイルがありません'], 400);
     }
 }
