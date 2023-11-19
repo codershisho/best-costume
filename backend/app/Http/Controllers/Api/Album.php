@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AlbumResource;
 use Illuminate\Http\Request;
 use App\Models\FileCategory;
 use Illuminate\Support\Facades\Storage;
@@ -10,19 +11,14 @@ use Illuminate\Support\Facades\Storage;
 class Album extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = FileCategory::all();
-
-        $data = $data->map(function ($file) {
-            return [
-                'category_id' => $file->category_id,
-                'category_name' => $file->category->name,
-                'image_url' => asset('storage/' . $file->file_path),
-                'created_at' => $file->created_at
-            ];
-        });
-        return response()->json($data);
+        $query = FileCategory::query();
+        if ($request->has('category_id') && isset($request->category_id)) {
+            $query->where('category_id', $request->category_id);
+        }
+        $data = $query->paginate(10);
+        return AlbumResource::collection($data);
     }
 
     public function upload(Request $request)

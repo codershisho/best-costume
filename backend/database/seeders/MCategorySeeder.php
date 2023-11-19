@@ -20,22 +20,27 @@ class MCategorySeeder extends Seeder
         // サンプルデータを作成
         MCategory::create([
             'name' => 'ALL',
+            'color' => '#448AFF',
         ]);
 
         MCategory::create([
             'name' => 'Mens',
+            'color' => '#448AFF',
         ]);
 
         MCategory::create([
             'name' => 'Womens',
+            'color' => '#448AFF',
         ]);
 
         MCategory::create([
             'name' => 'Kids',
+            'color' => '#448AFF',
         ]);
 
         MCategory::create([
             'name' => 'Others',
+            'color' => '#448AFF',
         ]);
     }
 }

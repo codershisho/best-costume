@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('m_categories', function (Blueprint $table) {
             $table->id()->comment('カテゴリーID');
             $table->string('name')->comment('カテゴリー名');
+            $table->string('color')->nullable()->comment('カラーコード');
             $table->timestamps();
             $table->softDeletes();
         });
