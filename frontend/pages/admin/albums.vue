@@ -77,7 +77,7 @@
       <v-pagination
         v-model="page"
         :length="pageLength"
-        @update:modelValue="searchCustomers"
+        @update:modelValue="searchAlbums"
       ></v-pagination>
     </div>
   </div>
@@ -109,6 +109,9 @@ const handleFileChange = (event: Event) => {
   }
 };
 
+/**
+ * 一覧検索
+ */
 async function searchAlbums() {
   const params = {};
   if (filterCategory != null) {
@@ -125,13 +128,17 @@ async function searchAlbums() {
   pageLength.value = data.value.meta.last_page;
 }
 
-async function filter() {}
-
+/**
+ * カテゴリーマスタ検索
+ */
 async function searchCategories() {
   const { data } = await useApiFetch('/api/bc/master/categories');
   categories.value = data.value;
 }
 
+/**
+ * ファイルアップロード
+ */
 async function uploadFiles() {
   if (filesToUpload.value.length === 0) {
     $swal.fire({
