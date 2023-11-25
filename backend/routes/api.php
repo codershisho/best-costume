@@ -43,6 +43,10 @@ Route::prefix('bc')->group(function () {
             Route::get('/uploaded', [Album::class, 'index']);
             Route::post('/upload', [Album::class, 'upload']);
         });
+        Route::prefix('scrape')->group(function () {
+            Route::get('/sites', [WebScraping::class, 'site']);
+            Route::post('/', [WebScraping::class, 'scrape']);
+        });
     });
 
     Route::prefix('master')->group(function () {
@@ -51,8 +55,6 @@ Route::prefix('bc')->group(function () {
         });
         Route::apiResource('categories', Category::class);
     });
-
-    Route::get('scrape', [WebScraping::class, 'scrape']);
 });
 
 Route::get('/sample', function () {

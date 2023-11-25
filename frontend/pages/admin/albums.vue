@@ -90,8 +90,8 @@ definePageMeta({
   layout: 'admin',
 });
 
+const { $showAlert } = useNuxtApp();
 const filesToUpload = ref<File[]>([]);
-const { $swal } = useNuxtApp();
 const categories = ref<Category[]>();
 const selectedCategory = ref(null);
 const filterCategory = ref(null);
@@ -141,28 +141,12 @@ async function searchCategories() {
  */
 async function uploadFiles() {
   if (filesToUpload.value.length === 0) {
-    $swal.fire({
-      title: '注意',
-      text: 'アップロードするファイルが選択されていません',
-      icon: 'warning',
-      toast: true,
-      position: 'top-end', //画面右上
-      showConfirmButton: false,
-      timer: 3000, //3秒経過後に閉じる
-    });
+    $showAlert('warning', '', 'アップロードするファイルが選択されていません');
     return;
   }
 
   if (selectedCategory.value == null) {
-    $swal.fire({
-      title: '注意',
-      text: 'カテゴリーが選択されていません',
-      icon: 'warning',
-      toast: true,
-      position: 'top-end', //画面右上
-      showConfirmButton: false,
-      timer: 3000, //3秒経過後に閉じる
-    });
+    $showAlert('warning', '', 'カテゴリーが選択されていません');
     return;
   }
 
@@ -177,26 +161,14 @@ async function uploadFiles() {
   });
 
   if (response.status.value == 'success') {
-    $swal.fire({
-      title: 'アップロード完了',
-      text: response.data.value.message,
-      icon: 'success',
-      toast: true,
-      position: 'top-end', //画面右上
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    $showAlert('success', 'アップロード完了', response.data.value.message);
     searchAlbums();
   } else {
-    $swal.fire({
-      title: 'アップロード失敗',
-      text: '容量が制限を超えている可能性があります。',
-      icon: 'error',
-      toast: true,
-      position: 'top-end', //画面右上
-      showConfirmButton: false,
-      timer: 3000,
-    });
+    $showAlert(
+      'error',
+      'アップロード失敗',
+      '容量が制限を超えている可能性があります。'
+    );
   }
   filesToUpload.value = [];
 }
