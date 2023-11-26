@@ -32,10 +32,11 @@ class WebScraping extends Controller
         $siteUrl = $request->url;
 
         $service = ScrapeFactory::create($siteId);
-        $service->scrape($siteUrl);
+        $data = $service->scrape($siteUrl);
 
         return response()->json([
-            'message' => 'データ登録しました。'
+            'message' => 'データ登録しました。',
+            'data' => $data
         ]);
     }
 }

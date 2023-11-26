@@ -17,7 +17,7 @@ abstract class AbstractScrape implements ScrapeInterface
      * @param string $siteUrl
      * @return void
      */
-    public function scrape(string $siteUrl): void
+    public function scrape(string $siteUrl): TScrapeSite
     {
         $this->_siteUrl = $siteUrl;
         $client = new \GuzzleHttp\Client();
@@ -27,7 +27,8 @@ abstract class AbstractScrape implements ScrapeInterface
         // 子クラスでサイトに応じたフィルタリング
         $this->scrapeFilter();
         // 保存
-        $this->store();
+        $model = $this->store();
+        return $model;
     }
 
     /**

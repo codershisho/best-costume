@@ -12,5 +12,5 @@ interface ScrapeInterface
      * @param string $siteUrl
      * @return void
      */
-    public function scrape(string $siteUrl): void;
+    public function scrape(string $siteUrl): TScrapeSite;
 }
