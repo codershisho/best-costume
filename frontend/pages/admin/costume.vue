@@ -20,7 +20,12 @@
       v-model="url"
     >
     </base-text>
-    <base-button color="blue-accent-3" text="プレビュー" @click="scrape">
+    <base-button
+      color="blue-accent-3"
+      text="プレビュー"
+      :loading="loading"
+      @click="scrape"
+    >
     </base-button>
   </v-sheet>
 </template>
@@ -34,6 +39,7 @@ const { $showAlert } = useNuxtApp();
 const url = ref('');
 const sites = ref([]);
 const selectedSite = ref('');
+const loading = ref(false);
 
 searchSites();
 
@@ -43,20 +49,26 @@ async function searchSites() {
 }
 
 async function scrape() {
+  loading.value = true;
   const res = await useApiFetch('api/bc/admin/scrape', {
     method: 'post',
     body: {
-      site: selectedSite.value,
+      site_id: selectedSite.value,
       url: url.value,
     },
   });
 
+  if (res.status.value == 'success') {
+    loading.value = false;
+    const message = res.data.value.message;
+    $showAlert('success', '成功', message);
+    return;
+  }
+
   if (res.status.value == 'error') {
-    $showAlert(
-      'error',
-      'スクレイピングに失敗',
-      '連絡してください、サイトの構成が変わった可能性があります。'
-    );
+    loading.value = false;
+    const errMessage = res.error.value.data.message;
+    $showAlert('error', 'スクレイピングに失敗', errMessage);
   }
 }
 </script>
