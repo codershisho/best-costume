@@ -1,23 +1,25 @@
 <template>
   <v-app class="bg-back">
-    <header class="tw-flex tw-justify-between tw-p-10">
-      <p>STUDIO ODDD.</p>
+    <header class="tw-flex tw-justify-between tw-p-8">
+      <div class="tw-w-48">
+        <img src="oddo_logo.png">
+      </div>
       <div class="tw-flex tw-w-80 tw-gap-5">
         <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
           density="compact" variant="solo" placeholder="衣装名を検索">
         </v-text-field>
         <NuxtLink to="favorite">
-        <v-btn density="default" icon="mdi-heart-outline"></v-btn>
+          <v-btn width="40px" height="40px" class="heart-color" density="default" icon="mdi-heart"></v-btn>
         </NuxtLink>
       </div>
     </header>
     <div class="tw-flex tw-h-full">
-      <div class="tw-flex tw-flex-col tw-w-10/12 tw-p-6 tw-mx-auto">
+      <div class="tw-flex tw-flex-col tw-w-64 tw-p-5 tw-mx-auto">
         <div class="tw-flex tw-flex-col tw-gap-4">
           <h2 class="tw-font-bold tw-text-2xl">Category</h2>
           <v-expansion-panels>
             <v-expansion-panel bg-color="primary">
-              <v-expansion-panel-title expand-icon="mdi-plus" collapse-icon="mdi-minus">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
                 MENS
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
@@ -31,7 +33,7 @@
           </v-expansion-panels>
           <v-expansion-panels>
             <v-expansion-panel bg-color="primary">
-              <v-expansion-panel-title expand-icon="mdi-plus" collapse-icon="mdi-minus">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
                 WOMENS
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
@@ -45,7 +47,7 @@
           </v-expansion-panels>
           <v-expansion-panels>
             <v-expansion-panel bg-color="primary">
-              <v-expansion-panel-title expand-icon="mdi-plus" collapse-icon="mdi-minus">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
                 KIDS
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
@@ -63,7 +65,7 @@
             <h2 class="tw-font-bold tw-text-2xl tw-mb-4">Sample Album</h2>
             <div>
               <v-img class="tw-rounded-lg" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
             </div>
           </div>
         </NuxtLink>
@@ -71,11 +73,9 @@
           <v-btn text="サインアウト" variant="text" prepend-icon="mdi-logout" @click="authStore.logout" />
         </div>
       </div>
-      <v-main>
-        <v-container>
+        <div class="tw-w-full tw-p-6">
           <slot />
-        </v-container>
-      </v-main>
+        </div>
     </div>
   </v-app>
 </template>
@@ -182,5 +182,9 @@ const authStore = useAuthStore();
 
 .st_side-menu>.v-expansion-panel-text__wrapper {
   padding: 0;
+}
+
+.heart-color{
+  color: #FF4C24;
 }
 </style>

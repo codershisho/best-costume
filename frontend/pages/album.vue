@@ -20,20 +20,20 @@
     </div>
     <div class="d-flex flex-wrap tw-gap-6">
       <div v-for="n in 6" class="d-flex">
-        <v-dialog>
-    <template v-slot:activator="{ props }">
-      <v-img v-bind="props" class="rounded-lg" :width="240" height="240" aspect-ratio="16/9" cover
-        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
-      </v-img>
-    </template>
-    <template v-slot:default="{ isActive }">
-      <v-card-actions class="tw-w-1/2 tw-m-auto">
-        <v-img @click="isActive.value = false" class="rounded-lg" :width="240" aspect-ratio="1" cover
-          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
-        </v-img>
-      </v-card-actions>
-    </template>
-  </v-dialog>
+        <v-dialog class="popup-img">
+          <template v-slot:activator="{ props }">
+            <v-img v-bind="props" class="rounded-lg" :width="240" height="240" aspect-ratio="16/9" cover
+              src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+            </v-img>
+          </template>
+          <template v-slot:default="{ isActive }">
+            <v-card-actions class="tw-w-full">
+              <v-img @click="isActive.value = false" class="rounded-lg" :width="240" aspect-ratio="1" cover
+                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+              </v-img>
+            </v-card-actions>
+          </template>
+        </v-dialog>
       </div>
     </div>
   </div>
@@ -44,3 +44,9 @@ definePageMeta({
   layout: 'section',
 });
 </script>
+
+<style>
+.popup-img > .v-overlay__content {
+  width: 50%;
+}
+</style>
