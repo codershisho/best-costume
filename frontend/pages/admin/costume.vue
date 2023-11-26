@@ -30,10 +30,26 @@
   </v-sheet>
   <div v-if="stored" class="d-flex mt-5">
     <v-sheet class="tw-w-2/6 rounded-lg mr-5 pa-5">
-      <BaseText class="pb-3" placeholder="商品名" v-model="name"></BaseText>
-      <BaseText class="py-3" placeholder="カテゴリー" v-model="name"></BaseText>
-      <BaseText class="py-3" placeholder="金額" v-model="name"></BaseText>
-      <BaseText class="py-3" placeholder="商品説明" v-model="name"></BaseText>
+      <BaseText
+        class="pb-3"
+        placeholder="商品名"
+        v-model="product.name"
+      ></BaseText>
+      <BaseText
+        class="py-3"
+        placeholder="カテゴリー"
+        v-model="product.category_id"
+      ></BaseText>
+      <BaseText
+        class="py-3"
+        placeholder="金額"
+        v-model="product.price"
+      ></BaseText>
+      <BaseText
+        class="py-3"
+        placeholder="商品説明"
+        v-model="product.description"
+      ></BaseText>
       <BaseButton
         class="mt-3"
         color="blue-accent-3"
@@ -75,9 +91,11 @@ const selectedSite = ref('');
 const loading = ref(false);
 const stored = ref(null);
 
-const name = ref('');
+const product = ref({});
 
 searchSites();
+
+// TODO カテゴリーの検索　親子にしないと無理かも？
 
 /** プルダウンに表示するサイトリスト検索 */
 async function searchSites() {
@@ -112,5 +130,24 @@ async function scrape() {
 }
 
 /** 商品登録処理 */
-async function onSave() {}
+async function onSave() {
+  product.value.scrape_site_id = stored.value.id;
+  // TODO カテゴリーをちゃんとセットする
+  product.value.category_id = 1;
+
+  const { data, status, error } = await useApiFetch('api/bc/master/products', {
+    method: 'post',
+    body: product.value,
+  });
+
+  if (status.value == 'success') {
+    $showAlert('success', '成功', data.value.message);
+    return;
+  }
+
+  if (status.value == 'error') {
+    const errMessage = error.value.data.message;
+    $showAlert('error', '失敗', errMessage);
+  }
+}
 </script>
