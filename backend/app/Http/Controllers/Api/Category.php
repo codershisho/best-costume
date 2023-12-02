@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MCategory;
+use Illuminate\Support\Facades\DB;
 
 class Category extends Controller
 {
@@ -15,11 +16,20 @@ class Category extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        try {
+            DB::beginTransaction();
+            $model = new MCategory();
+            $model->fill($request->all());
+            $model->save();
 
-        return MCategory::create($data);
+            DB::commit();
+            return response()->json([
+                'message' => 'カテゴリー登録完了'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     public function show(MCategory $mCategory)
@@ -27,15 +37,22 @@ class Category extends Controller
         return $mCategory;
     }
 
-    public function update(Request $request, MCategory $mCategory)
+    public function update($id, Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $mCategory->update($data);
+            $model = MCategory::findOrFail($id);
+            $model->update($request->all());
 
-        return $mCategory;
+            DB::commit();
+            return response()->json([
+                'message' => 'カテゴリー更新完了'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     public function destroy(MCategory $mCategory)
