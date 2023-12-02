@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
 use App\Http\Controllers\Api\Category;
+use App\Http\Controllers\Api\Menu;
 use App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -59,6 +60,9 @@ Route::prefix('bc')->group(function () {
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {
             Route::post('/', [Product::class, 'store']);
+        });
+        Route::prefix('menus')->group(function () {
+            Route::get('/', [Menu::class, 'index']);
         });
     });
 });
