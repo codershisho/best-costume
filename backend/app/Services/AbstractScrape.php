@@ -54,6 +54,7 @@ abstract class AbstractScrape implements ScrapeInterface
                 'title' => $this->_entity['title'],
                 'description' => $this->_entity['description'],
                 'price' => $this->_entity['price'],
+                'images' => $this->_entity['images'],
             ]
         );
     }

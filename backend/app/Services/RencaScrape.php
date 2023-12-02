@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 /**
  * RENCAサイトのスクレイプ処理
  */
@@ -14,6 +16,11 @@ class RencaScrape extends AbstractScrape
         $title = $this->_crawler->filter('.box_item_det > h3');
         $description = $this->_crawler->filter('.detail_description');
         $price = $this->_crawler->filter('.pri > span');
+        $images = $this->_crawler->filter('li > img')->each(function ($el) {
+            // Log::debug("images", ['images' => $el->attr('data-lazy')]);
+            return ($el->attr('data-lazy'));
+        });
+        Log::debug("images", ['images' => $images]);
         // TODO imageのスクレイプ&保存
 
         $this->_entity = [
@@ -22,6 +29,7 @@ class RencaScrape extends AbstractScrape
             'title' => $title->text(),
             'description' => $description->text(),
             'price' => preg_replace('/[^0-9]/', '', $price->text()),
+            'images' => implode(',', $images)
         ];
     }
 }

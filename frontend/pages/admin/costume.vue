@@ -90,7 +90,11 @@
           {{ stored.title }}
         </div>
         <div class="d-flex">
-          <div class="w-50">※画像エリア</div>
+          <div class="w-50">
+            <div v-for="(image, i) in images" :key="i">
+              <img :src="image" />
+            </div>
+          </div>
           <div class="w-50">
             {{ stored.description }}
           </div>
@@ -117,6 +121,7 @@ const sites = ref([]);
 const selectedSite = ref('');
 const loading = ref(false);
 const stored = ref(null);
+const images = ref([]);
 
 const product = ref({});
 
@@ -162,6 +167,7 @@ async function scrape() {
     loading.value = false;
     const message = res.data.value.message;
     stored.value = res.data.value.data;
+    images.value = stored.value.images.split(',');
     $showAlert('success', '成功', message);
     return;
   }
