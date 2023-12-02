@@ -30,32 +30,59 @@
   </v-sheet>
   <div v-if="stored" class="d-flex mt-5">
     <v-sheet class="tw-w-2/6 rounded-lg mr-5 pa-5">
-      <BaseText
-        class="pb-3"
-        placeholder="商品名"
-        v-model="product.name"
-      ></BaseText>
-      <BaseText
-        class="py-3"
-        placeholder="カテゴリー"
-        v-model="product.category_id"
-      ></BaseText>
-      <BaseText
-        class="py-3"
-        placeholder="金額"
-        v-model="product.price"
-      ></BaseText>
-      <BaseText
-        class="py-3"
-        placeholder="商品説明"
-        v-model="product.description"
-      ></BaseText>
-      <BaseButton
-        class="mt-3"
-        color="blue-accent-3"
-        text="商品登録"
-        @click="onSave"
-      ></BaseButton>
+      <v-form v-model="valid">
+        <BaseText
+          class="pb-3"
+          placeholder="商品名"
+          :rules="[requiredValidation]"
+          v-model="product.name"
+        ></BaseText>
+        <v-select
+          class="py-3"
+          :items="menus"
+          placeholder="親メニュー"
+          item-value="id"
+          item-title="name"
+          variant="solo-filled"
+          flat
+          density="compact"
+          hide-details="auto"
+          :rules="[requiredValidation]"
+          v-model="parent"
+        />
+        <v-select
+          class="py-3"
+          :items="children"
+          placeholder="子メニュー"
+          item-value="id"
+          item-title="name"
+          variant="solo-filled"
+          flat
+          density="compact"
+          :rules="[requiredValidation]"
+          hide-details="auto"
+          v-model="selectedMenu"
+        />
+        <BaseText
+          class="py-3"
+          placeholder="金額"
+          v-model="product.price"
+          :rules="[requiredValidation]"
+        ></BaseText>
+        <BaseText
+          class="py-3"
+          placeholder="商品説明"
+          v-model="product.description"
+          :rules="[requiredValidation]"
+        ></BaseText>
+        <BaseButton
+          class="mt-3"
+          color="blue-accent-3"
+          text="商品登録"
+          :disabled="!valid"
+          @click="onSave"
+        ></BaseButton>
+      </v-form>
     </v-sheet>
     <v-sheet class="tw-w-4/6 rounded-lg">
       <div class="ma-3 pa-5 !tw-bg-slate-100">
@@ -93,14 +120,30 @@ const stored = ref(null);
 
 const product = ref({});
 
-searchSites();
+const menus = ref([]);
+const parent = ref(null);
+const children = computed(() => {
+  if (parent.value == null) {
+    return [];
+  }
+  return menus.value[parent.value].children;
+});
+const selectedMenu = ref(null);
 
-// TODO カテゴリーの検索　親子にしないと無理かも？
+const valid = ref(false);
+const requiredValidation = (v) => !!v || '必ず入力してください';
+
+searchSites();
 
 /** プルダウンに表示するサイトリスト検索 */
 async function searchSites() {
   const { data } = await useApiFetch('api/bc/admin/scrape/sites');
   sites.value = data.value;
+}
+
+async function searchMenus() {
+  const { data } = await useApiFetch('api/bc/master/menus');
+  menus.value = data.value.data;
 }
 
 /** スクレイプ処理 */
@@ -115,6 +158,7 @@ async function scrape() {
   });
 
   if (res.status.value == 'success') {
+    searchMenus();
     loading.value = false;
     const message = res.data.value.message;
     stored.value = res.data.value.data;
@@ -132,8 +176,7 @@ async function scrape() {
 /** 商品登録処理 */
 async function onSave() {
   product.value.scrape_site_id = stored.value.id;
-  // TODO カテゴリーをちゃんとセットする
-  product.value.category_id = 1;
+  product.value.category_id = selectedMenu.value;
 
   const { data, status, error } = await useApiFetch('api/bc/master/products', {
     method: 'post',
