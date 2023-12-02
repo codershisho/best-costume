@@ -53,6 +53,8 @@ Route::prefix('bc')->group(function () {
     Route::prefix('master')->group(function () {
         Route::prefix('statuses')->group(function () {
             Route::get('/', [Status::class, 'index']);
+            Route::post('/', [Status::class, 'store']);
+            Route::put('/{id}', [Status::class, 'update']);
         });
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {
