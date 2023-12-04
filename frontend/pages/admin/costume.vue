@@ -131,7 +131,7 @@ const children = computed(() => {
   if (parent.value == null) {
     return [];
   }
-  return menus.value[parent.value].children;
+  return menus.value[parent.value -1].children;
 });
 const selectedMenu = ref(null);
 
