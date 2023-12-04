@@ -1,80 +1,88 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" color="back" border>
-      <div class="d-flex justify-center">
-        <div class="tw-w-10/12">
-          <v-btn class="mt-3 w-100" color="primary" @click="isOpenMens = !isOpenMens">
-            MENS
-          </v-btn>
-          <v-list v-show="isOpenMens" elevation="0" class="mt-1 w-100 rounded-lg" bg-color="white">
-            <v-list-item v-for="(menuMen, i) in menusMens" key="i" :value="menuMen" :title="menuMen.name.toString()">
-            </v-list-item>
-          </v-list>
-        </div>
+  <v-app class="bg-back">
+    <header class="tw-flex tw-justify-between tw-p-8">
+      <div class="tw-w-48">
+        <img src="oddo_logo.png">
       </div>
-      <div class="d-flex justify-center">
-        <div class="tw-w-10/12">
-          <v-btn class="mt-3 w-100" color="primary" @click="isOpenWomens = !isOpenWomens">
-            WOMENS
-          </v-btn>
-          <v-list v-show="isOpenWomens" elevation="0" class="mt-1 w-100 rounded-lg" bg-color="white">
-            <v-list-item v-for="(menusWoman, i) in menusWomans" key="i" :value="menusWoman"
-              :title="menusWoman.name.toString()">
-            </v-list-item>
-          </v-list>
-        </div>
+      <div class="tw-flex tw-w-80 tw-gap-5">
+        <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
+          density="compact" variant="solo" placeholder="衣装名を検索">
+        </v-text-field>
+        <NuxtLink to="favorite">
+          <v-btn width="40px" height="40px" class="heart-color" density="default" icon="mdi-heart"></v-btn>
+        </NuxtLink>
       </div>
-      <div class="d-flex justify-center">
-        <div class="tw-w-10/12">
-          <v-btn class="mt-3 w-100" color="primary" @click="isOpenKids = !isOpenKids">
-            KIDS
-          </v-btn>
-          <v-list v-show="isOpenKids" elevation="0" class="mt-1 w-100 rounded-lg" bg-color="white">
-            <v-list-item v-for="(menusKid, i) in menusKids" key="i" :value="menusKid" :title="menusKid.name.toString()">
-            </v-list-item>
-          </v-list>
+    </header>
+    <div class="tw-flex tw-h-full">
+      <div class="tw-flex tw-flex-col tw-w-64 tw-p-5 tw-mx-auto">
+        <div class="tw-flex tw-flex-col tw-gap-4">
+          <h2 class="tw-font-bold tw-text-2xl">Category</h2>
+          <v-expansion-panels>
+            <v-expansion-panel bg-color="primary">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
+                MENS
+              </v-expansion-panel-title>
+              <v-expansion-panel-text class="st_side-menu">
+                <v-list class="tw-w-full !tw-p-0" bg-color="white">
+                  <v-list-item v-for="(menuMens, i) in menusMens" key="i" :value="menuMens"
+                    :title="menuMens.name.toString()">
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <v-expansion-panels>
+            <v-expansion-panel bg-color="primary">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
+                WOMENS
+              </v-expansion-panel-title>
+              <v-expansion-panel-text class="st_side-menu">
+                <v-list class="tw-w-full !tw-p-0" bg-color="white">
+                  <v-list-item v-for="(menuWomen, i) in menusWomens" key="i" :value="menuWomen"
+                    :title="menuWomen.name.toString()">
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <v-expansion-panels>
+            <v-expansion-panel bg-color="primary">
+              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
+                KIDS
+              </v-expansion-panel-title>
+              <v-expansion-panel-text class="st_side-menu">
+                <v-list class="tw-w-full !tw-p-0" bg-color="white">
+                  <v-list-item v-for="(menuKids, i) in menusKids" key="i" :value="menuKids"
+                    :title="menuKids.name.toString()">
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </div>
-      </div>
-      <NuxtLink to="/album">
-        <div>
-          <div class="mt-3 tw-text-2xl tw-font-bold tw-text-center">
-            Sample Album
+        <NuxtLink to="/album">
+          <div class="tw-mt-6">
+            <h2 class="tw-font-bold tw-text-2xl tw-mb-4">Sample Album</h2>
+            <div>
+              <v-img class="tw-rounded-lg" aspect-ratio="1" cover
+                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+            </div>
           </div>
-          <div>
-            <v-sheet class="mx-5" height="100" color="grey"> </v-sheet>
-          </div>
+        </NuxtLink>
+        <div class="tw-text-center tw-mt-auto">
+          <v-btn text="サインアウト" variant="text" prepend-icon="mdi-logout" @click="authStore.logout" />
         </div>
-      </NuxtLink>
-      <div>
-        <v-btn class="mt-3 w-100" text="サインアウト" variant="text" prepend-icon="mdi-logout" @click="authStore.logout" />
       </div>
-    </v-navigation-drawer>
-
-    <v-app-bar flat color="back">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title>Applications</v-app-bar-title>
-      <v-spacer></v-spacer>
-      <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
-        density="compact" variant="solo" placeholder="衣装名を検索">
-      </v-text-field>
-      <NuxtLink to="/favorite">
-        <v-btn class="bg-white" icon="mdi-heart-outline" variant="elevated"></v-btn>
-      </NuxtLink>
-    </v-app-bar>
-
-    <v-main class="bg-back">
-      <v-container>
-        <slot />
-      </v-container>
-    </v-main>
+        <div class="tw-w-full tw-p-6">
+          <slot />
+        </div>
+    </div>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import { Menu } from '../types/menu';
-
-const drawer = ref(true);
 
 const menusMens = ref<Menu[]>([
   {
@@ -104,7 +112,7 @@ const menusMens = ref<Menu[]>([
   },
 ]);
 
-const menusWomans = ref<Menu[]>([
+const menusWomens = ref<Menu[]>([
   {
     id: 1,
     name: 'ドレス',
@@ -170,5 +178,13 @@ const authStore = useAuthStore();
 <style>
 .v-navigation-drawer__content::-webkit-scrollbar {
   display: none;
+}
+
+.st_side-menu>.v-expansion-panel-text__wrapper {
+  padding: 0;
+}
+
+.heart-color{
+  color: #FF4C24;
 }
 </style>

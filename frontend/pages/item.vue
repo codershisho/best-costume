@@ -1,22 +1,17 @@
 <template>
   <div>
-    <v-chip>カテゴリー</v-chip>
-    <h2 class="tw-font-bold tw-text-2xl tw-my-4">商品名</h2>
-    <div class="tw-flex tw-gap-16">
+    <v-chip>七五三</v-chip>
+    <h2 class="tw-font-bold tw-text-2xl tw-my-4">七五三レンタル(3歳男児被布)2811白兜xグレーブラウン</h2>
+    <div class="tw-flex tw-gap-12 tw-p-8">
       <div class="tw-w-1/2">
-        <v-img class="rounded-lg tw-w-full" aspect-ratio="1" cover
-          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-        <div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-mt-4">
-          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+        <v-img  class="rounded-lg tw-bg-white tw-shadow-sm" aspect-ratio="1" contain src="1AO2811000.jpg"></v-img>
+        <div class="tw-grid tw-grid-cols-4 tw-gap-3 tw-mt-4">
+          <v-img class="rounded-lg tw-col-span-1 tw-bg-white tw-shadow-sm" aspect-ratio="1" contain src="1AO2811000.jpg"></v-img>
+          <v-img class="rounded-lg tw-col-span-1 tw-bg-white tw-shadow-sm" aspect-ratio="1" contain src="1AO2811000_2.jpg"></v-img>
+          <v-img class="rounded-lg tw-col-span-1 tw-bg-white tw-shadow-sm" aspect-ratio="1" contain src="1AO2811000_3.jpg"></v-img>
+          <v-img class="rounded-lg tw-col-span-1 tw-bg-white tw-shadow-sm" aspect-ratio="1" contain
+            src="600x800_65e783d03a365e2812dee45c0ef42f9e.jpg"></v-img>
+          <v-img class="rounded-lg tw-col-span-1 tw-w-40" aspect-ratio="1" contain src="1AO2811000.jpg"></v-img>
         </div>
       </div>
       <div class="tw-flex tw-w-1/2 tw-flex-col tw-justify-between">
@@ -28,9 +23,9 @@
         <div class="tw-text-right">
           <p class="tw-font-bold tw-text-xl">¥10,000</p>
           <div class="tw-flex tw-justify-between tw-mt-4">
-            <v-btn density="comfortable" icon="mdi-heart"></v-btn>
+            <v-btn width="40px" height="40px" class="heart-color" density="default" icon="mdi-heart-outline"></v-btn>
             <v-btn class="tw-w-32" color="primary">
-              All
+              注文する
             </v-btn>
           </div>
         </div>
