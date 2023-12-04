@@ -12,5 +12,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusSeeder::class);
         $this->call(MCategorySeeder::class);
         $this->call(MenuTableSeeder::class);
+        $this->call(MScrapeSitesTableSeeder::class);
     }
 }
