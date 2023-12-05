@@ -1,27 +1,31 @@
 <template>
   <div class="d-flex flex-wrap tw-gap-4">
-    <v-card v-for="n in 6" width="240" height="240">
-      <NuxtLink to="/item">
-        <div class="d-flex pa-5">
-          <v-btn @click="onclick" density="compact" icon="mdi-heart-outline"></v-btn>
-          <v-img :width="300" aspect-ratio="16/9" cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+    <v-card v-for="n in 6" class="!tw-rounded-lg" width="228">
+      <div>
+        <div class="tw-p-4">
+          <v-img  aspect-ratio="1" contain src="1AO2811000.jpg"></v-img>
+          <v-btn @click="addFavorite" width="40px" height="40px" class="!tw-absolute tw-top-4 tw-left-4 heart-color" density="default" icon="mdi-heart-outline"></v-btn>
         </div>
-        <div class="tw-font-bold px-5">商品名A</div>
+        <NuxtLink to="/item">
+        <div class="tw-font-bold tw-p-5">七五三レンタル(3歳男児被布)2811白兜xグレーブラウン</div>
       </NuxtLink>
+        </div>
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
+
 definePageMeta({
   middleware: "auth"
 });
 
 const authStore = useAuthStore();
 
-function onclick() {
-  alert('test');
+const favoriteIcon = ref("mdi-heart-outline");
+
+const addFavorite = () => {
+  favoriteIcon.value = "mdi-heart";
 }
 
 </script>

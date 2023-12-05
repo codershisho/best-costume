@@ -1,44 +1,28 @@
 <template>
-  <div class="d-flex">
-    <div>顧客リスト</div>
-    <v-spacer></v-spacer>
+  <div class="d-flex tw-justify-between tw-mb-4">
+    <h2 class="tw-font-bold tw-text-xl tw-pt-2">顧客リスト</h2>
     <dialog-customer @close="search"></dialog-customer>
   </div>
-  <div class="mt-3">
+  <div class="mt-2">
     <v-sheet class="mb-3 pl-3 rounded-lg">
-      <div class="d-flex">
-        <v-chip-group
-          class="tw-w-4/6"
-          color="#E65100"
-          variant="tonal"
-          v-model="selectedStatus"
-          @update:modelValue="filter"
-        >
-          <v-chip
-            v-for="(status, i) in statuses"
-            :key="i"
-            label
-            class="tw-w-1/12"
-            :value="status.id"
-          >
+      <div class="d-flex tw-items-center">
+        <v-chip-group class="tw-w-4/6" color="#E65100" variant="tonal" v-model="selectedStatus"
+          @update:modelValue="filter">
+          <v-chip v-for="(status, i) in statuses" :key="i" label :value="status.id">
             <div>
               {{ status.name }}
             </div>
           </v-chip>
         </v-chip-group>
-        <base-text
-          class="ma-1"
-          placeholder="search"
-          clearable
-          v-model="searchText"
-          @click:clear="search"
-          @update:modelValue="filter"
-        ></base-text>
+        <base-text class="ma-1" placeholder="search" clearable v-model="searchText" @click:clear="search"
+          @update:modelValue="filter"></base-text>
+        <v-btn class="tw-mx-3" variant="plain" density="compact" icon="mdi-swap-vertical"></v-btn>
       </div>
     </v-sheet>
-    <v-table class="pa-5 rounded-lg">
+    <v-table class="tw-px-2 rounded-lg">
       <thead>
         <tr>
+          <th class="!tw-w-2 !tw-px-2"><input type="checkbox"></th>
           <th>顧客ID</th>
           <th>顧客</th>
           <th>電話番号</th>
@@ -49,6 +33,7 @@
       </thead>
       <tbody>
         <tr v-for="(customer, i) in customers" :key="i">
+          <td class="!tw-w-2 !tw-px-2"><input type="checkbox"></td>
           <td>{{ customer.id }}</td>
           <td>{{ customer.name }}</td>
           <td>{{ customer.phone }}</td>
@@ -59,19 +44,14 @@
             </v-chip>
           </td>
           <td>
-            <v-icon color="#90A4AE" @click="jump(customer)"
-              >mdi-page-next-outline</v-icon
-            >
+            <v-icon color="#90A4AE" @click="jump(customer)">mdi-page-next-outline</v-icon>
           </td>
         </tr>
       </tbody>
     </v-table>
-    <div class="text-center">
-      <v-pagination
-        v-model="page"
-        :length="pageLength"
-        @update:modelValue="searchCustomers"
-      ></v-pagination>
+    <div>
+      <v-pagination class="oddo_pagination tw-mt-2" v-model="page" :length="pageLength" density="compact"
+        @update:modelValue="searchCustomers"></v-pagination>
     </div>
   </div>
 </template>
@@ -133,3 +113,11 @@ function jump(customer: any) {
   navigateTo('/customer/' + customer.id);
 }
 </script>
+
+<style>
+
+.oddo_pagination .v-pagination__list {
+  justify-content: flex-end;
+}
+
+</style>
