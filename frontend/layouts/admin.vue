@@ -13,7 +13,7 @@
         ></v-list-item>
       </v-list> -->
         <v-list class="tw-flex tw-flex-col tw-items-center tw-gap-6">
-          <div class="tw-w-40± tw-pb-10">
+          <div class="tw-w-40 tw-pb-10">
             <img src="/oddo_logo.png">
           </div>
           <v-list-item v-for="[icon, text, url] in links" :key="icon" :prepend-icon="icon" :title="text" :to="url" link
