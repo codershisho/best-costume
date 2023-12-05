@@ -3,34 +3,38 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\MStatus;
 use Illuminate\Http\Request;
+use App\Models\MCategory;
 use Illuminate\Support\Facades\DB;
 
-class Status extends Controller
+class Category extends Controller
 {
     public function index()
     {
-        $data = MStatus::all();
-        return response()->json($data);
+        return MCategory::all();
     }
 
     public function store(Request $request)
     {
         try {
             DB::beginTransaction();
-            $model = new MStatus();
+            $model = new MCategory();
             $model->fill($request->all());
             $model->save();
 
             DB::commit();
             return response()->json([
-                'message' => 'ステータス登録完了'
+                'message' => 'カテゴリー登録完了'
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
+    }
+
+    public function show(MCategory $mCategory)
+    {
+        return $mCategory;
     }
 
     public function update($id, Request $request)
@@ -38,16 +42,23 @@ class Status extends Controller
         try {
             DB::beginTransaction();
 
-            $model = MStatus::findOrFail($id);
+            $model = MCategory::findOrFail($id);
             $model->update($request->all());
 
             DB::commit();
             return response()->json([
-                'message' => 'ステータス更新完了'
+                'message' => 'カテゴリー更新完了'
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
+    }
+
+    public function destroy(MCategory $mCategory)
+    {
+        $mCategory->delete();
+
+        return response()->json(['message' => 'Category deleted successfully']);
     }
 }

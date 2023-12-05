@@ -3,22 +3,40 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-
-use Symfony\Component\DomCrawler\Crawler;
+use App\Models\MScrapeSite;
+use App\Http\Requests\ScrapeSiteRequest;
+use App\Services\ScrapeFactory;
 
 class WebScraping extends Controller
 {
-    public function scrape()
+    /**
+     * 登録済みのサイト一覧を返す
+     *
+     * @return void
+     */
+    public function site()
     {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', 'https://renca.jp/item/WWYY5004000');
-        $crawler = new Crawler($response->getBody()->getContents());
-        $name = $crawler->filter('.box_item_det > h3');
-        // Logger($name);
+        $data = MScrapeSite::all();
+        return response()->json($data);
+    }
+
+    /**
+     * スクレイプ処理
+     *
+     * @param ScrapeSiteRequest $request
+     * @return void
+     */
+    public function scrape(ScrapeSiteRequest $request)
+    {
+        $siteId = $request->site_id;
+        $siteUrl = $request->url;
+
+        $service = ScrapeFactory::create($siteId);
+        $data = $service->scrape($siteUrl);
+
         return response()->json([
-            'msg' => $name->text()
+            'message' => 'データ登録しました。',
+            'data' => $data
         ]);
     }
 }

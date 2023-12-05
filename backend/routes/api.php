@@ -4,6 +4,9 @@ use App\Http\Controllers\Api\Album;
 use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
+use App\Http\Controllers\Api\Category;
+use App\Http\Controllers\Api\Menu;
+use App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Http\Request;
@@ -39,17 +42,29 @@ Route::prefix('bc')->group(function () {
             Route::post('/', [Customer::class, 'store']);
         });
         Route::prefix('albums')->group(function () {
+            Route::get('/uploaded', [Album::class, 'index']);
             Route::post('/upload', [Album::class, 'upload']);
+        });
+        Route::prefix('scrape')->group(function () {
+            Route::get('/sites', [WebScraping::class, 'site']);
+            Route::post('/', [WebScraping::class, 'scrape']);
         });
     });
 
     Route::prefix('master')->group(function () {
         Route::prefix('statuses')->group(function () {
             Route::get('/', [Status::class, 'index']);
+            Route::post('/', [Status::class, 'store']);
+            Route::put('/{id}', [Status::class, 'update']);
+        });
+        Route::apiResource('categories', Category::class);
+        Route::prefix('products')->group(function () {
+            Route::post('/', [Product::class, 'store']);
+        });
+        Route::prefix('menus')->group(function () {
+            Route::get('/', [Menu::class, 'index']);
         });
     });
-
-    Route::get('scrape', [WebScraping::class, 'scrape']);
 });
 
 Route::get('/sample', function () {

@@ -1,20 +1,7 @@
 version: '3'
 
 services:
-  nginx:
-    image: codershisho/nginx:1.25.0
-    container_name: nginx-${PROJECT_NAME}
-    tty: true
-    ports:
-      - ${NGINX_PORT}:80
-    volumes:
-      - ./conf.d:/etc/nginx/conf.d
-    environment:
-      TZ: ${TIME_ZONE}
-    depends_on:
-      - node
-  
-  node:
+  nuxt:
     image: codershisho/node:18.18.0-alpine
     container_name: node-${PROJECT_NAME}
     tty: true
@@ -26,24 +13,26 @@ services:
       - ${NODE_PORT}:3000
       - 24678:24678 # HMR用のポートを追加
     volumes:
-      - ${NOTE_MOUNT_FOLDER}:/var/www
+      - ${NOTE_MOUNT_FOLDER}:/app
+      - ${NOTE_MOUNT_FOLDER}/node_modules:/app/node_modules
     stdin_open: true
     restart: always
-    depends_on:
-      - php
-  
-  php:
+    working_dir: /app
+
+  laravel:
     image: codershisho/php:8.2-fpm
     container_name: php-${PROJECT_NAME}
     tty: true
     ports:
-      - ${PHP_PORT}:9000
+      - ${PHP_PORT}:8000
     volumes:
-      - ${PHP_MOUNT_FOLDER}:/var/www
+      - ${PHP_MOUNT_FOLDER}:/var/www/html
     stdin_open: true
     restart: always
     environment:
       TZ: ${TIME_ZONE}
+    working_dir: /var/www/html
+    command: php artisan serve --host=0.0.0.0
 
   db:
     image: mariadb:10.9
