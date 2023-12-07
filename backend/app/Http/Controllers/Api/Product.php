@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\MProduct;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,8 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Controller
 {
-    public function index()
+    /**
+     * 検索処理
+     *
+     * @return void
+     */
+    public function search()
     {
+        $data = MProduct::with('site')->paginate(50);
+        return ProductResource::collection($data);
     }
 
     public function store(ProductRequest $request)

@@ -2,7 +2,7 @@
   <v-app class="bg-back">
     <header class="tw-flex tw-justify-between tw-p-8">
       <div class="tw-w-48">
-        <img src="oddo_logo.png">
+        <img src="../oddo_logo.png">
       </div>
       <div class="tw-flex tw-w-80 tw-gap-5">
         <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line

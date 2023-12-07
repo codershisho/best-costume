@@ -59,6 +59,7 @@ Route::prefix('bc')->group(function () {
         });
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {
+            Route::get('/search', [Product::class, 'search']);
             Route::post('/', [Product::class, 'store']);
         });
         Route::prefix('menus')->group(function () {
