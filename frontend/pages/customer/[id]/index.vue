@@ -7,7 +7,7 @@
           <v-btn @click="addFavorite" width="40px" height="40px" class="!tw-absolute tw-top-4 tw-left-4 heart-color"
             density="default" icon="mdi-heart-outline"></v-btn>
         </div>
-        <NuxtLink to="/item">
+        <NuxtLink :to="`/customer/${urlPathCustomerId}/item/${costume.id}`">
           <div class="tw-font-bold tw-p-5">{{ costume.name }}</div>
         </NuxtLink>
       </div>
@@ -32,6 +32,7 @@ const addFavorite = () => {
   favoriteIcon.value = "mdi-heart";
 }
 
+const urlPathCustomerId = useRoute().params.id
 const costumes = ref<Product[]>();
 const page = ref<number>(1);
 const pageLength = ref<number>(1);

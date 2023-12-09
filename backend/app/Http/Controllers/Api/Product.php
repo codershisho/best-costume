@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductResource;
 use App\Models\MProduct;
 use Exception;
@@ -21,6 +22,21 @@ class Product extends Controller
     {
         $data = MProduct::with('site')->paginate(50);
         return ProductResource::collection($data);
+    }
+
+    /**
+     * id検索
+     *
+     * @param int $id
+     * @return void
+     */
+    public function show(int $id)
+    {
+        $data = MProduct::with('site')->findOrFail($id);
+        return response()->json([
+            'data' => new ProductDetailResource($data),
+            'message' => '検索完了しました。'
+        ]);
     }
 
     public function store(ProductRequest $request)
