@@ -11,6 +11,7 @@ export type ProductDetail = {
     scrape_site_id: number;
     name: string;
     category_id: number;
+    category_name: string;
     price: number;
     description: string;
     images: string[];

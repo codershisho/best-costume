@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-chip>七五三</v-chip>
+    <v-chip>{{ detail.category_name }}</v-chip>
     <h2 class="tw-font-bold tw-text-2xl tw-my-4">{{ detail.name }}</h2>
     <div class="tw-flex tw-gap-12 tw-p-8">
       <div class="tw-w-1/2">
@@ -41,6 +41,7 @@ const detail = ref<ProductDetail>({
   scrape_site_id: 0,
   name: "",
   category_id: 0,
+  category_name: "",
   price: 0,
   description: "",
   images: [],

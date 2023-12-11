@@ -32,7 +32,7 @@ class Product extends Controller
      */
     public function show(int $id)
     {
-        $data = MProduct::with('site')->findOrFail($id);
+        $data = MProduct::with('site', 'menu.parent')->findOrFail($id);
         return response()->json([
             'data' => new ProductDetailResource($data),
             'message' => '検索完了しました。'

@@ -13,6 +13,7 @@ class ProductDetailResource extends JsonResource
             'scrape_site_id' => $this->scrape_site_id,
             'name' => $this->name,
             'category_id' => $this->category_id,
+            'category_name' => $this->menu->name,
             'price' => $this->price(),
             'description' => $this->description(),
             'images' => $this->images(),

@@ -17,4 +17,9 @@ class MProduct extends Model
     {
         return $this->belongsTo('App\Models\TScrapeSite', 'scrape_site_id', 'id');
     }
+
+    public function menu()
+    {
+        return $this->belongsTo('App\Models\MMenu', 'category_id', 'id');
+    }
 }

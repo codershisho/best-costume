@@ -1,5 +1,10 @@
 export type Menu = {
   id: Number;
   name: String;
-  url: String;
+  children: Array<MenuDetail>
 };
+
+export type MenuDetail = {
+  id: number;
+  name: string;
+}
