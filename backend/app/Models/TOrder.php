@@ -12,4 +12,19 @@ class TOrder extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Models\MCustomer', 'customer_id', 'id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Models\MProduct', 'product_id', 'id');
+    }
+
+    public function statuss()
+    {
+        return $this->belongsTo('App\Models\MStatus', 'status', 'id');
+    }
 }

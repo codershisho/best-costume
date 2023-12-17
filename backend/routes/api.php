@@ -51,6 +51,9 @@ Route::prefix('bc')->group(function () {
             Route::get('/sites', [WebScraping::class, 'site']);
             Route::post('/', [WebScraping::class, 'scrape']);
         });
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [Order::class, 'search']);
+        });
     });
 
     Route::prefix('master')->group(function () {

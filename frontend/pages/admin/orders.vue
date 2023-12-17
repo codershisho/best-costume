@@ -25,44 +25,40 @@
           <th>顧客ID</th>
           <th>顧客</th>
           <th>電話番号</th>
-          <th>来店日</th>
+          <th>注文日</th>
           <th>ステータス</th>
-          <th>専用ページ</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(customer, i) in customers" :key="i">
+        <tr v-for="(order, i) in orders" :key="i">
           <td class="!tw-w-2 !tw-px-2"><input type="checkbox"></td>
-          <td>{{ customer.id }}</td>
-          <td>{{ customer.name }}</td>
-          <td>{{ customer.phone }}</td>
-          <td>{{ customer.visit_date }}</td>
+          <td>{{ order.customer_id }}</td>
+          <td>{{ order.customer_name }}</td>
+          <td>{{ order.customer_phone }}</td>
+          <td>{{ order.created_at }}</td>
           <td>
-            <v-chip :color="customer.status_color" label class="tw-w-10/12">
-              {{ customer.status_name }}
+            <v-chip :color="order.status_color" label class="tw-w-10/12">
+              {{ order.status_name }}
             </v-chip>
-          </td>
-          <td>
-            <v-icon color="#90A4AE" @click="jump(customer)">mdi-page-next-outline</v-icon>
           </td>
         </tr>
       </tbody>
     </v-table>
     <div>
       <v-pagination class="oddo_pagination tw-mt-2" v-model="page" :length="pageLength" density="compact"
-        @update:modelValue="searchCustomers"></v-pagination>
+        @update:modelValue="searchOrders"></v-pagination>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Customer } from '~/types/customer';
+import { Order } from '~/types/product';
 
 definePageMeta({
   layout: 'admin',
 });
 
-const customers = ref<Customer[]>();
+const orders = ref<Order[]>();
 const statuses = ref();
 const selectedStatus = ref(null);
 const searchText = ref('');
@@ -73,14 +69,14 @@ search();
 
 async function search() {
   searhStatus();
-  searchCustomers();
+  searchOrders();
 }
 
-async function searchCustomers() {
+async function searchOrders() {
   const { data } = await useApiFetch(
-    `/api/bc/admin/customers?page=${page.value}`
+    `api/bc/admin/orders?page=${page.value}`
   );
-  customers.value = data.value.data;
+  orders.value = data.value.data;
   pageLength.value = data.value.meta.last_page;
 }
 
@@ -93,13 +89,13 @@ async function filter() {
     params.status_id = selectedStatus.value;
   }
   const { data } = await useApiFetch(
-    `/api/bc/admin/customers/search?page=${page.value}`,
+    `/api/bc/admin/orders?page=${page.value}`,
     {
       method: 'get',
       params: params,
     }
   );
-  customers.value = data.value.data;
+  orders.value = data.value.data;
   pageLength.value = data.value.meta.last_page;
 }
 
@@ -107,16 +103,10 @@ async function searhStatus() {
   const { data } = await useApiFetch('/api/bc/master/statuses');
   statuses.value = data.value;
 }
-
-function jump(customer: any) {
-  navigateTo('/customer/' + customer.id);
-}
 </script>
 
 <style>
-
 .oddo_pagination .v-pagination__list {
   justify-content: flex-end;
 }
-
 </style>
