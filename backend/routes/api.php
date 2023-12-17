@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
 use App\Http\Controllers\Api\Category;
+use App\Http\Controllers\Api\Favorite;
 use App\Http\Controllers\Api\Menu;
+use App\Http\Controllers\Api\Order;
 use App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -65,6 +67,16 @@ Route::prefix('bc')->group(function () {
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);
+        });
+    });
+
+    Route::prefix('customer')->group(function () {
+        Route::prefix('orders')->group(function () {
+            Route::post('/', [Order::class, 'store']);
+        });
+        Route::prefix('favorites')->group(function () {
+            Route::get('/', [Favorite::class, 'search']);
+            Route::post('/', [Favorite::class, 'store']);
         });
     });
 });
