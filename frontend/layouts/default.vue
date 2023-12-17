@@ -24,7 +24,8 @@
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
                 <v-list class="tw-w-full !tw-p-0" bg-color="white">
-                  <v-list-item v-for="(child, i) in menu.children" key="i" :value="child.id" :title="child.name">
+                  <v-list-item v-for="(child, i) in menu.children" key="i" :value="child.id" :title="child.name"
+                    @click="selectCategory(child.id)">
                   </v-list-item>
                 </v-list>
               </v-expansion-panel-text>
@@ -52,14 +53,13 @@
 </template>
 
 <script setup lang="ts">
+import { useProductStore } from '~/stores/product';
 import { Menu } from '../types/menu';
 
 const menus = ref<Menu[]>([]);
 const authStore = useAuthStore();
-interface Emit {
-  (e: 'performSearch', id: number): void;
-}
-const emit = defineEmits<Emit>();
+const productStore = useProductStore();
+productStore.clear();
 
 searchMenus();
 
@@ -69,6 +69,15 @@ async function searchMenus() {
     'api/bc/master/menus'
   );
   menus.value = data.value.data;
+}
+
+/**
+ * メニューに応じた商品検索
+ * @param id 
+ */
+function selectCategory(id: number) {
+  productStore.setCategory(id);
+  productStore.searchProducts();
 }
 
 </script>

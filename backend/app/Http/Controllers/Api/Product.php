@@ -18,9 +18,15 @@ class Product extends Controller
      *
      * @return void
      */
-    public function search()
+    public function search(Request $request)
     {
-        $data = MProduct::with('site')->paginate(50);
+        $query = MProduct::query();
+        $query = $query->with('site');
+        // カテゴリーで絞り込み
+        if ($request->has('category')) {
+            $query = $query->where('category_id', $request->category);
+        }
+        $data = $query->paginate(50);
         return ProductResource::collection($data);
     }
 

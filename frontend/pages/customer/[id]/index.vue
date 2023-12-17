@@ -18,13 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import { useProductStore } from '~/stores/product';
 import { Product } from '~/types/product';
 
 definePageMeta({
   middleware: "auth"
 });
-
-const authStore = useAuthStore();
 
 const favoriteIcon = ref("mdi-heart-outline");
 
@@ -36,16 +35,19 @@ const urlPathCustomerId = useRoute().params.id
 const costumes = ref<Product[]>();
 const page = ref<number>(1);
 const pageLength = ref<number>(1);
+const productStore = useProductStore();
 
-search();
+/** ストアの変更をwatchしてデータ更新 */
+watch(() => productStore.product.products, () => {
+  costumes.value = productStore.product.products;
+  pageLength.value = productStore.product.pageLength;
+});
 
-/** 衣装の検索 */
+
+/** ページ検索 */
 async function search() {
-  const { data } = await useApiFetch(
-    `api/bc/master/products/search?page=${page.value}`
-  );
-  costumes.value = data.value.data;
-  pageLength.value = data.value.meta.last_page;
+  productStore.setPage(page.value);
+  productStore.searchProducts();
 }
 
 </script>
