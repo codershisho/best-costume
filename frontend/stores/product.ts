@@ -66,6 +66,19 @@ export const useProductStore = defineStore('product', {
       });
       // 微妙だけど、いったん再検索
       this.searchProducts();
+    },
+
+    /**
+     * 商品注文登録
+     * @param productId 
+     */
+    order(productId: number) {
+      return useApiFetch(`api/bc/customer/${this._product.customerId}/orders`, {
+        method: 'post',
+        body: {
+          product_id: productId
+        }
+      });
     }
   },
 

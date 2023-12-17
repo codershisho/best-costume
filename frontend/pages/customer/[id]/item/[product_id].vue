@@ -16,7 +16,7 @@
           <p class="tw-font-bold tw-text-xl">{{ detail.price }}</p>
           <div class="tw-flex tw-justify-between tw-mt-4">
             <v-btn width="40px" height="40px" class="heart-color" density="default" icon="mdi-heart-outline"></v-btn>
-            <v-btn class="tw-w-32" color="primary">
+            <v-btn class="tw-w-32" color="primary" @click="order">
               注文する
             </v-btn>
           </div>
@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { ProductDetail } from '../../../../types/product'
-import { ref } from 'vue';
+import { useProductStore } from '~/stores/product';
+import { ProductDetail } from '~/types/product';
 
 definePageMeta({
   layout: 'section',
@@ -36,6 +36,7 @@ definePageMeta({
 
 const { $showAlert } = useNuxtApp();
 const urlPathProductId = useRoute().params.product_id
+const productStore = useProductStore();
 const detail = ref<ProductDetail>({
   id: 0,
   scrape_site_id: 0,
@@ -50,7 +51,6 @@ const detail = ref<ProductDetail>({
 onMounted(() => {
   // ここにmounted時に実行したい処理を記述
   search();
-  console.log('Component mounted');
 });
 
 /** 衣装の詳細検索 */
@@ -61,7 +61,24 @@ async function search() {
 
   if (status.value == 'success') {
     detail.value = data.value.data
-    // $showAlert('success', '成功', data.value.message);
+    return;
+  }
+
+  if (status.value == 'error') {
+    const errMessage = error.value.data.message;
+    $showAlert('error', '失敗', errMessage);
+  }
+}
+
+/**
+ * 衣装の注文
+ */
+async function order() {
+  const { data, status, error } = await productStore.order(Number(urlPathProductId));
+
+  if (status.value == 'success') {
+    const message = data.value.message;
+    $showAlert('success', '成功', message);
     return;
   }
 
