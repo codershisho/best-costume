@@ -17,11 +17,8 @@ class RencaScrape extends AbstractScrape
         $description = $this->_crawler->filter('.detail_description');
         $price = $this->_crawler->filter('.pri > span');
         $images = $this->_crawler->filter('li > img')->each(function ($el) {
-            // Log::debug("images", ['images' => $el->attr('data-lazy')]);
             return ($el->attr('data-lazy'));
         });
-        Log::debug("images", ['images' => $images]);
-        // TODO imageのスクレイプ&保存
 
         $this->_entity = [
             'site_id' => self::$_siteId,
