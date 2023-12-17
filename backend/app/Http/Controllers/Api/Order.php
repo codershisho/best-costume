@@ -14,13 +14,20 @@ class Order extends Controller
     public function search(Request $request)
     {
         $query = TOrder::query();
-        if ($request->has('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
+        $query = $query->with([
+            'customer' => function ($query) use ($request) {
+                if ($request->has('name')) {
+                    $query->where('name', 'like', '%' . $request->name . '%');
+                }
+            },
+            'product.site',
+            'statuss'
+        ]);
         if ($request->has('status_id')) {
             $query->where('status', $request->status_id);
         }
-        $data = $query->with(['customer', 'product.site', 'statuss'])->paginate(100);
+
+        $data = $query->paginate(100);
         return OrderResource::collection($data);
     }
 
