@@ -70,7 +70,7 @@ Route::prefix('bc')->group(function () {
         });
     });
 
-    Route::prefix('customer')->group(function () {
+    Route::prefix('customer/{id}')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/', [Order::class, 'store']);
         });

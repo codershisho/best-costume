@@ -22,4 +22,9 @@ class MProduct extends Model
     {
         return $this->belongsTo('App\Models\MMenu', 'category_id', 'id');
     }
+
+    public function favorite()
+    {
+        return $this->belongsTo('App\Models\TFavorite', 'id', 'product_id');
+    }
 }

@@ -4,8 +4,8 @@
       <div>
         <div class="tw-p-4">
           <v-img aspect-ratio="1" contain :src="costume.thumbnail"></v-img>
-          <v-btn @click="addFavorite" width="40px" height="40px" class="!tw-absolute tw-top-4 tw-left-4 heart-color"
-            density="default" icon="mdi-heart-outline"></v-btn>
+          <v-btn @click="favorite(costume)" width="40px" height="40px" class="!tw-absolute tw-top-4 tw-left-4 heart-color"
+            density="default" :icon="costume.favorite ? `mdi-heart` : `mdi-heart-outline`"></v-btn>
         </div>
         <NuxtLink :to="`/customer/${urlPathCustomerId}/item/${costume.id}`">
           <div class="tw-font-bold tw-p-5">{{ costume.name }}</div>
@@ -25,12 +25,6 @@ definePageMeta({
   middleware: "auth"
 });
 
-const favoriteIcon = ref("mdi-heart-outline");
-
-const addFavorite = () => {
-  favoriteIcon.value = "mdi-heart";
-}
-
 const urlPathCustomerId = useRoute().params.id
 const costumes = ref<Product[]>();
 const page = ref<number>(1);
@@ -48,6 +42,11 @@ watch(() => productStore.product.products, () => {
 async function search() {
   productStore.setPage(page.value);
   productStore.searchProducts();
+}
+
+/** お気に入りボタン押下時 */
+async function favorite(costume: Product) {
+  productStore.favorite(costume);
 }
 
 </script>

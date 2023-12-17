@@ -56,6 +56,7 @@
 import { useProductStore } from '~/stores/product';
 import { Menu } from '../types/menu';
 
+const urlPathCustomerId = useRoute().params.id
 const menus = ref<Menu[]>([]);
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -77,6 +78,7 @@ async function searchMenus() {
  */
 function selectCategory(id: number) {
   productStore.setCategory(id);
+  productStore.setCustomerId(Number(urlPathCustomerId));
   productStore.searchProducts();
 }
 

@@ -2,8 +2,9 @@ export type Product = {
     id: number,
     scrape_site_id: number,
     name: string,
-    category_id:number,
-    thumbnail:string
+    category_id: number,
+    thumbnail: string,
+    favorite: boolean
 }
 
 export type ProductDetail = {

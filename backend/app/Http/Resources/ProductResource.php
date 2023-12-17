@@ -14,6 +14,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'category_id' => $this->category_id,
             'thumbnail' => $this->thumbnail(),
+            'favorite' => $this->getFavorite()
         ];
     }
 
@@ -26,5 +27,18 @@ class ProductResource extends JsonResource
     {
         $images = explode(",", $this->site->images);
         return $images[0];
+    }
+
+    /**
+     * 該当商品をお気に入り登録しているか判定
+     *
+     * @return void
+     */
+    private function getFavorite()
+    {
+        if (isset($this->favorite)) {
+            return true;
+        }
+        return false;
     }
 }

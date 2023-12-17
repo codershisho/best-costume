@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\MProduct;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Controller
@@ -20,8 +21,15 @@ class Product extends Controller
      */
     public function search(Request $request)
     {
+        $customerId = $request->customer_id;
         $query = MProduct::query();
-        $query = $query->with('site');
+        $query = $query->with([
+            'site',
+            'favorite' => function ($query) use ($customerId) {
+                // 各ユーザーのお気に入り情報も一緒に取る
+                $query->where('customer_id', $customerId);
+            }
+        ]);
         // カテゴリーで絞り込み
         if ($request->has('category')) {
             $query = $query->where('category_id', $request->category);
