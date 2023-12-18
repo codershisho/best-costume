@@ -26,7 +26,9 @@
           <th>顧客</th>
           <th>電話番号</th>
           <th>注文日</th>
+          <th>商品URL</th>
           <th>ステータス</th>
+          <th>ステータス更新用</th>
         </tr>
       </thead>
       <tbody>
@@ -37,9 +39,16 @@
           <td>{{ order.customer_phone }}</td>
           <td>{{ order.created_at }}</td>
           <td>
+            <a :href="order.product_url" target="_blank">商品サイト</a>
+          </td>
+          <td>
             <v-chip :color="order.status_color" label class="tw-w-10/12">
               {{ order.status_name }}
             </v-chip>
+          </td>
+          <td>
+            <v-select v-model="order.status_id" :items="statuses" item-title="name" item-value="id" variant="solo-filled"
+              flat density="compact" hide-details="auto" @update:modelValue="updateStatus(order)"></v-select>
           </td>
         </tr>
       </tbody>
@@ -58,6 +67,7 @@ definePageMeta({
   layout: 'admin',
 });
 
+const { $showAlert } = useNuxtApp();
 const orders = ref<Order[]>();
 const statuses = ref();
 const selectedStatus = ref(null);
@@ -72,6 +82,9 @@ async function search() {
   searchOrders();
 }
 
+/**
+ * 注文一覧の検索
+ */
 async function searchOrders() {
   const { data } = await useApiFetch(
     `api/bc/admin/orders?page=${page.value}`
@@ -80,6 +93,9 @@ async function searchOrders() {
   pageLength.value = data.value.meta.last_page;
 }
 
+/**
+ * 検索条件がある場合はセットして検索
+ */
 async function filter() {
   const params = {};
   if (searchText.value != '') {
@@ -99,9 +115,33 @@ async function filter() {
   pageLength.value = data.value.meta.last_page;
 }
 
+/**
+ * ステータス候補を検索
+ */
 async function searhStatus() {
   const { data } = await useApiFetch('/api/bc/master/statuses');
   statuses.value = data.value;
+}
+
+/**
+ * ステータス更新
+ */
+async function updateStatus(order: Order) {
+  console.log(order);
+  const { data, status, error } = await useApiFetch(`api/bc/customer/${order.customer_id}/orders/${order.order_id}`, {
+    method: 'put',
+    body: {
+      status_id: order.status_id
+    }
+  });
+  if (status.value === 'success') {
+    $showAlert('success', 'ステータス更新成功', data.value.message);
+  } else if (status.value === 'error') {
+    const errMessage = error.value.data.message;
+    $showAlert('error', '失敗', errMessage);
+  }
+
+  searchOrders()
 }
 </script>
 

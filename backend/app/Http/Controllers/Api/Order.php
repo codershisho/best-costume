@@ -11,7 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class Order extends Controller
 {
-
+    /**
+     * 注文一覧検索
+     *
+     * @param Request $request
+     * @return void
+     */
     public function search(Request $request)
     {
         $query = TOrder::query();
@@ -21,9 +26,11 @@ class Order extends Controller
             'statuss'
         ]);
 
+        // ステータスで絞り込み
         if ($request->filled('status_id')) {
             $query->where('status', $request->status_id);
         }
+        // 顧客名で絞り込み
         if ($request->filled('name')) {
             $query->whereHas('customer', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->name . '%');
@@ -59,5 +66,32 @@ class Order extends Controller
         return response()->json([
             'message' => '注文登録完了しました'
         ]);
+    }
+
+    /**
+     * 注文ステータス更新
+     *
+     * @param int $id customer_id
+     * @param int $order_id order_id
+     * @param Request $request
+     * @return void
+     */
+    public function update($id, $order_id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $model = TOrder::findOrFail($order_id);
+            $model->status = $request->status_id;
+            $model->save();
+
+            DB::commit();
+            return response()->json([
+                'message' => 'ステータス更新完了'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

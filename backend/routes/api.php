@@ -76,6 +76,7 @@ Route::prefix('bc')->group(function () {
     Route::prefix('customer/{id}')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/', [Order::class, 'store']);
+            Route::put('/{order_id}', [Order::class, 'update']);
         });
         Route::prefix('favorites')->group(function () {
             Route::get('/', [Favorite::class, 'search']);
