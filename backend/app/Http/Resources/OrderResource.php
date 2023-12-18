@@ -21,8 +21,8 @@ class OrderResource extends JsonResource
             'status_id' => $this->statuss->id,
             'status_name' => $this->statuss->name,
             'status_color' => $this->statuss->color,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->format('Y-m-d h:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d h:i:s'),
         ];
     }
 }
