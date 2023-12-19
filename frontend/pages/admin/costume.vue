@@ -15,7 +15,7 @@
     </div>
     <base-text
       class="mr-3"
-      label="外部サイトの衣装が載っているURLを貼り付けてください"
+      label="衣装サイトの登録したい衣装のURLを貼り付けてください"
       clearable
       v-model="url"
     >
@@ -86,23 +86,27 @@
     </v-sheet>
     <v-sheet class="tw-w-4/6 rounded-lg">
       <div class="ma-3 pa-5 !tw-bg-slate-100">
-        <div>
+        <div class="tw-font-bold tw-text-xl tw-mb-4">
           {{ stored.title }}
         </div>
-        <div class="d-flex">
-          <div class="w-50">
-            <div v-for="(image, i) in images" :key="i">
-              <img :src="image" />
+        <div class="d-flex tw-gap-4">
+          <div class="tw-w-96">
+            <div class="mb-2">
+              <img :src="images[0]" />
+            </div>
+            <div class="d-flex tw-gap-2 tw-flex-wrap">
+                <div class="tw-w-12" v-for="(image, i) in images" :key="i">
+                  <img :src="image" />
+                </div>
             </div>
           </div>
-          <div class="w-50">
-            {{ stored.description }}
-          </div>
-        </div>
-        <div class="mt-5 d-flex">
-          <div class="w-50">※サブ画像エリア</div>
-          <div class="w-50">
-            {{ stored.price }}
+          <div class="tw-flex tw-flex-col tw-w-full tw-justify-between tw-items-end">
+            <div>
+              {{ stored.description }}
+            </div>
+            <div class="tw-font-bold tw-text-xl ">
+              ¥{{ stored.price }}
+            </div>
           </div>
         </div>
       </div>
