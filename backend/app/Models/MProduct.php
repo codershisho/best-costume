@@ -12,4 +12,19 @@ class MProduct extends Model
     use SoftDeletes;
 
     protected $guarded  = ['id'];
+
+    public function site()
+    {
+        return $this->belongsTo('App\Models\TScrapeSite', 'scrape_site_id', 'id');
+    }
+
+    public function menu()
+    {
+        return $this->belongsTo('App\Models\MMenu', 'category_id', 'id');
+    }
+
+    public function favorite()
+    {
+        return $this->belongsTo('App\Models\TFavorite', 'id', 'product_id');
+    }
 }

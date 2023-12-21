@@ -13,6 +13,11 @@ class MMenu extends Model
 
     protected $guarded  = ['id'];
 
+    public function parent()
+    {
+        return $this->belongsTo(MMenu::class, 'parent_id', 'id');
+    }
+
     public function children()
     {
         return $this->hasMany(MMenu::class, 'parent_id', 'id');

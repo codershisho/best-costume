@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Api\Status;
 use App\Http\Controllers\Api\WebScraping;
 use App\Http\Controllers\Api\Category;
+use App\Http\Controllers\Api\Favorite;
 use App\Http\Controllers\Api\Menu;
+use App\Http\Controllers\Api\Order;
 use App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -49,6 +51,9 @@ Route::prefix('bc')->group(function () {
             Route::get('/sites', [WebScraping::class, 'site']);
             Route::post('/', [WebScraping::class, 'scrape']);
         });
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [Order::class, 'search']);
+        });
     });
 
     Route::prefix('master')->group(function () {
@@ -59,10 +64,23 @@ Route::prefix('bc')->group(function () {
         });
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {
+            Route::get('/search', [Product::class, 'search']);
+            Route::get('/{id}', [Product::class, 'show']);
             Route::post('/', [Product::class, 'store']);
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);
+        });
+    });
+
+    Route::prefix('customer/{id}')->group(function () {
+        Route::prefix('orders')->group(function () {
+            Route::post('/', [Order::class, 'store']);
+            Route::put('/{order_id}', [Order::class, 'update']);
+        });
+        Route::prefix('favorites')->group(function () {
+            Route::get('/', [Favorite::class, 'search']);
+            Route::post('/', [Favorite::class, 'store']);
         });
     });
 });

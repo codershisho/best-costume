@@ -115,9 +115,7 @@ function jump(customer: any) {
 </script>
 
 <style>
-
 .oddo_pagination .v-pagination__list {
   justify-content: flex-end;
 }
-
 </style>
