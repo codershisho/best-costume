@@ -84,10 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import { Category } from '~/types/Album';
+import { fetchCategory } from "~/composables/albumApi";
+import { Category } from "~/types/Album";
 
 definePageMeta({
-  layout: 'admin',
+  layout: "admin",
 });
 
 const { $showAlert } = useNuxtApp();
@@ -113,17 +114,7 @@ const handleFileChange = (event: Event) => {
  * 一覧検索
  */
 async function searchAlbums() {
-  const params = {};
-  if (filterCategory != null) {
-    params.category_id = filterCategory.value;
-  }
-  const { data } = await useApiFetch(
-    `/api/bc/admin/albums/uploaded?page=${page.value}`,
-    {
-      method: 'get',
-      params: params,
-    }
-  );
+  const { data } = await fetchAlbums(Number(filterCategory.value), page.value);
   albumns.value = data.value.data;
   pageLength.value = data.value.meta.last_page;
 }
@@ -132,7 +123,7 @@ async function searchAlbums() {
  * カテゴリーマスタ検索
  */
 async function searchCategories() {
-  const { data } = await useApiFetch('/api/bc/master/categories');
+  const { data } = await fetchCategory();
   categories.value = data.value;
 }
 
@@ -141,33 +132,33 @@ async function searchCategories() {
  */
 async function uploadFiles() {
   if (filesToUpload.value.length === 0) {
-    $showAlert('warning', '', 'アップロードするファイルが選択されていません');
+    $showAlert("warning", "", "アップロードするファイルが選択されていません");
     return;
   }
 
   if (selectedCategory.value == null) {
-    $showAlert('warning', '', 'カテゴリーが選択されていません');
+    $showAlert("warning", "", "カテゴリーが選択されていません");
     return;
   }
 
   const formData = new FormData();
   filesToUpload.value.forEach((file) => {
-    formData.append('files[]', file);
+    formData.append("files[]", file);
   });
-  formData.append('selectedCategory', selectedCategory.value);
-  const response = await useApiFetch('/api/bc/admin/albums/upload', {
-    method: 'POST',
+  formData.append("selectedCategory", selectedCategory.value);
+  const response = await useApiFetch("/api/bc/admin/albums/upload", {
+    method: "POST",
     body: formData,
   });
 
-  if (response.status.value == 'success') {
-    $showAlert('success', 'アップロード完了', response.data.value.message);
+  if (response.status.value == "success") {
+    $showAlert("success", "アップロード完了", response.data.value.message);
     searchAlbums();
   } else {
     $showAlert(
-      'error',
-      'アップロード失敗',
-      '容量が制限を超えている可能性があります。'
+      "error",
+      "アップロード失敗",
+      "容量が制限を超えている可能性があります。"
     );
   }
   filesToUpload.value = [];
