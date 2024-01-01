@@ -58,10 +58,13 @@ class Product extends Controller
         try {
             DB::beginTransaction();
 
-            // 既存サイトとかぶってないかチェック
-            $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
-            if ($isExist) {
-                throw new Exception('すでにそのサイトは商品登録済みです');
+            // 外部サイトからの商品登録の場合のみ
+            if ($request->scrape_site_id != 0) {
+                // 既存サイトとかぶってないかチェック
+                $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
+                if ($isExist) {
+                    throw new Exception('すでにそのサイトは商品登録済みです');
+                }
             }
 
             $model = new MProduct();

@@ -51,6 +51,9 @@ class ProductDetailResource extends JsonResource
      */
     private function images()
     {
+        if (!isset($this->site->images)) {
+            return '';
+        }
         return explode(",", $this->site->images);
     }
 }

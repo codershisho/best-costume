@@ -25,6 +25,9 @@ class ProductResource extends JsonResource
      */
     private function thumbnail()
     {
+        if (!isset($this->site->images)) {
+            return '';
+        }
         $images = explode(",", $this->site->images);
         return $images[0];
     }
