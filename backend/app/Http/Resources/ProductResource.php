@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ProductResource extends JsonResource
 {
@@ -26,7 +27,14 @@ class ProductResource extends JsonResource
     private function thumbnail()
     {
         if (!isset($this->site->images)) {
-            return '';
+            // 自前の衣装の場合storageから画像をとってくる
+            $files = Storage::files('public/ownProducts/' . $this->id);
+            if (empty($files)) {
+                return '';
+            }
+            $thumbnail = $files[0];
+            $thumbnail = str_replace('public/', '', $thumbnail);
+            return asset('storage/' . $thumbnail);
         }
         $images = explode(",", $this->site->images);
         return $images[0];

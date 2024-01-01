@@ -71,6 +71,16 @@ class Product extends Controller
             $model->fill($request->all());
             $model->save();
 
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+                $productId = $model->id;
+                foreach ($files as $file) {
+                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('public/ownProducts/' . $productId, $fileName);
+                    $filePath = str_replace('public/', '', $filePath);
+                }
+            }
+
             DB::commit();
 
             return response()->json(['message' => '商品登録完了しました']);

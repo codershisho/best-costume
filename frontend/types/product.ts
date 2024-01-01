@@ -13,7 +13,8 @@ export type ProductRegist = {
   name: string | null,
   category_id: number | null,
   price: number | null,
-  description: string | null
+  description: string | null,
+  images: Array<File> | null
 }
 
 export type ProductDetail = {

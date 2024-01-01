@@ -54,6 +54,12 @@
         :disabled="!valid"
         @click="onSave"
       ></BaseButton>
+      <input
+        type="file"
+        multiple
+        accept=".jpg, .jpeg, .png"
+        @change="handleFileChange"
+      />
     </v-form>
   </v-sheet>
 </template>
@@ -70,6 +76,7 @@ const product = ref<ProductRegist>({
   category_id: 0,
   price: null,
   description: null,
+  images: null,
 });
 
 // メニュー関連
@@ -97,6 +104,21 @@ async function setMenus() {
 /** 衣装登録 */
 async function onSave() {
   product.value.category_id = selectedMenu.value;
-  await registProduct(product.value);
+  const formData = new FormData();
+  product.value.images.forEach((file) => {
+    formData.append("files[]", file);
+  });
+  for (const key of Object.keys(product.value)) {
+    formData.append(key, product.value[key]);
+  }
+  // console.log(formData);
+  await registProduct(formData);
 }
+/** ファイル選択 */
+const handleFileChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files) {
+    product.value.images = Array.from(input.files);
+  }
+};
 </script>
