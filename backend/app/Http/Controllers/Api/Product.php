@@ -96,4 +96,20 @@ class Product extends Controller
             throw $th;
         }
     }
+
+    public function delete(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $ids = collect($request->ids)->toArray();
+            MProduct::destroy($ids);
+
+            DB::commit();
+            return response()->json(['message' => '商品削除完了しました']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
 }

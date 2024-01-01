@@ -22,12 +22,15 @@
           density="compact"
           icon="mdi-swap-vertical"
         ></v-btn>
+        <v-btn color="error" @click="del">削除</v-btn>
       </div>
     </v-sheet>
     <v-table class="tw-px-2 rounded-lg">
       <thead>
         <tr>
-          <th class="!tw-w-2 !tw-px-2"><input type="checkbox" /></th>
+          <th class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="selectAll" />
+          </th>
           <th>衣装ID</th>
           <th>衣装名</th>
           <th>カテゴリー</th>
@@ -38,7 +41,9 @@
       </thead>
       <tbody>
         <tr v-for="(product, i) in products" :key="i">
-          <td class="!tw-w-2 !tw-px-2"><input type="checkbox" /></td>
+          <td class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="product.checked" />
+          </td>
           <td>{{ product.id }}</td>
           <td>{{ product.name }}</td>
           <td>{{ product.menu }}</td>
@@ -68,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { fetchProducts } from "~/composables/productApi";
+import { fetchProducts, deleteProducts } from "~/composables/productApi";
 import { Product } from "~/types/product";
 
 definePageMeta({
@@ -79,12 +84,42 @@ const products = ref<Product[]>();
 const page = ref(1);
 const pageLength = ref(1);
 const searchText = ref("");
+const selectAll = ref<boolean | null>(false);
+
+/** チェックボックスの選択状態をwatch */
+watch(selectAll, (newVal) => {
+  products.value.forEach((product) => (product.checked = newVal));
+});
+watch(
+  () => "products.*.checked",
+  (newVal) => {
+    products.value.forEach((product) => (product.checked = newVal));
+    const allChecked = products.value.every((product) => product.checked);
+    const someChecked = products.value.some((product) => product.checked);
+    selectAll.value = allChecked ? true : someChecked ? null : false;
+  }
+);
 
 searchProducts();
 
+/** 検索 */
 async function searchProducts() {
   const data = await fetchProducts(searchText.value);
   products.value = data.data;
   pageLength.value = data.meta.last_page;
+}
+
+/** 削除 */
+async function del() {
+  const ids = products.value
+    .filter((item) => item.checked == true)
+    .map((item) => item.id);
+
+  if (ids.length == 0) {
+    alert("削除対象を1件以上選択してください。");
+  }
+
+  await deleteProducts(ids);
+  searchProducts();
 }
 </script>

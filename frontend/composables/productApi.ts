@@ -38,3 +38,23 @@ export const fetchProducts = async (
   );
   return data.value as productTypes.Product[];
 };
+
+export const deleteProducts = async (ids: Array<number>) => {
+  const { $showAlert } = useNuxtApp();
+  const { data, status, error } = await useApiFetch('api/bc/master/products', {
+    method: 'delete',
+    body: {
+      ids: ids
+    }
+  })
+
+  if (status.value == "success") {
+    $showAlert("success", "成功", data.value.message);
+    return;
+  }
+
+  if (status.value == "error") {
+    const errMessage = error.value.data.message;
+    $showAlert("error", "失敗", errMessage);
+  }
+}

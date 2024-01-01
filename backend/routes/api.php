@@ -68,6 +68,7 @@ Route::prefix('bc')->group(function () {
             Route::get('/search', [Product::class, 'search']);
             Route::get('/{id}', [Product::class, 'show']);
             Route::post('/', [Product::class, 'store']);
+            Route::delete('/', [Product::class, 'delete']);
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);
