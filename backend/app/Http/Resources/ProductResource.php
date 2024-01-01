@@ -15,7 +15,10 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'category_id' => $this->category_id,
             'thumbnail' => $this->thumbnail(),
-            'favorite' => $this->getFavorite()
+            'favorite' => $this->getFavorite(),
+            'site' => $this->site->msite ?? '',
+            'menu' => $this->getMenu(),
+            'updated_at' => $this->updated_at->format('Y-m-d h:i:s'),
         ];
     }
 
@@ -51,5 +54,17 @@ class ProductResource extends JsonResource
             return true;
         }
         return false;
+    }
+
+    /**
+     * 親メニューと子メニュー名を結合して返す
+     *
+     * @return void
+     */
+    private function getMenu()
+    {
+        $menuName = $this->menu->name;
+        $parentMenuName = $this->menu->parent->name;
+        return $parentMenuName . ' > ' . $menuName;
     }
 }

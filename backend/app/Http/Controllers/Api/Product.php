@@ -25,6 +25,9 @@ class Product extends Controller
         $query = MProduct::query();
         $query = $query->with([
             'site',
+            'site.msite',
+            'menu',
+            'menu.parent',
             'favorite' => function ($query) use ($customerId) {
                 // 各ユーザーのお気に入り情報も一緒に取る
                 $query->where('customer_id', $customerId);
@@ -33,6 +36,10 @@ class Product extends Controller
         // カテゴリーで絞り込み
         if ($request->has('category')) {
             $query = $query->where('category_id', $request->category);
+        }
+        // 衣装名で絞り込み
+        if ($request->has('searchText')) {
+            $query = $query->where('name', 'like', '%' . $request->searchText . '%');
         }
         $data = $query->paginate(50);
         return ProductResource::collection($data);
@@ -59,13 +66,13 @@ class Product extends Controller
             DB::beginTransaction();
 
             // 外部サイトからの商品登録の場合のみ
-            if ($request->scrape_site_id != 0) {
-                // 既存サイトとかぶってないかチェック
-                $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
-                if ($isExist) {
-                    throw new Exception('すでにそのサイトは商品登録済みです');
-                }
-            }
+            // if ($request->scrape_site_id != 0) {
+            //     // 既存サイトとかぶってないかチェック
+            //     $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
+            //     if ($isExist) {
+            //         throw new Exception('すでにそのサイトは商品登録済みです');
+            //     }
+            // }
 
             $model = new MProduct();
             $model->fill($request->all());

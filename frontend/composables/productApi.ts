@@ -16,4 +16,25 @@ export const registProduct = async (model: productTypes.ProductRegist) => {
     const errMessage = error.value.data.message;
     $showAlert("error", "失敗", errMessage);
   }
-}
+};
+
+export const fetchProducts = async (
+  text: string = "",
+  page: number = 0
+): Promise<productTypes.Product[]> => {
+
+  const params = {};
+
+  if (text != '') {
+    params.searchText = text;
+  }
+
+  const { data, status, error } = await useApiFetch(
+    `api/bc/master/products/search?page=${page}`,
+    {
+      method: 'get',
+      params: params
+    }
+  );
+  return data.value as productTypes.Product[];
+};
