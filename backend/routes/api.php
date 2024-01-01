@@ -46,6 +46,7 @@ Route::prefix('bc')->group(function () {
         Route::prefix('albums')->group(function () {
             Route::get('/uploaded', [Album::class, 'index']);
             Route::post('/upload', [Album::class, 'upload']);
+            Route::delete('/uploaded', [Album::class, 'delete']);
         });
         Route::prefix('scrape')->group(function () {
             Route::get('/sites', [WebScraping::class, 'site']);

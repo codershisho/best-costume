@@ -50,10 +50,14 @@
           </div>
         </v-chip>
       </v-chip-group>
+      <v-btn color="error" @click="del">削除</v-btn>
     </div>
     <v-table class="pa-5 rounded-lg">
       <thead>
         <tr>
+          <th class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="selectAll" />
+          </th>
           <th>カテゴリー</th>
           <th>イメージ</th>
           <th>追加日</th>
@@ -61,6 +65,9 @@
       </thead>
       <tbody>
         <tr v-for="(albumn, i) in albumns" :key="i">
+          <td class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="albumn.checked" />
+          </td>
           <td>
             <v-chip :color="albumn.category_color" label>
               {{ albumn.category_name }}
@@ -99,6 +106,7 @@ const filterCategory = ref(null);
 const albumns = ref([]);
 const page = ref(1);
 const pageLength = ref(1);
+const selectAll = ref<boolean | null>(false);
 
 searchCategories();
 searchAlbums();
@@ -109,6 +117,20 @@ const handleFileChange = (event: Event) => {
     filesToUpload.value = Array.from(input.files);
   }
 };
+
+/** チェックボックスの選択状態をwatch */
+watch(selectAll, (newVal) => {
+  albumns.value.forEach((albumn) => (albumn.checked = newVal));
+});
+watch(
+  () => "albumns.*.checked",
+  (newVal) => {
+    albumns.value.forEach((albumn) => (albumn.checked = newVal));
+    const allChecked = albumns.value.every((albumn) => albumn.checked);
+    const someChecked = albumns.value.some((albumn) => albumn.checked);
+    selectAll.value = allChecked ? true : someChecked ? null : false;
+  }
+);
 
 /**
  * 一覧検索
@@ -162,5 +184,16 @@ async function uploadFiles() {
     );
   }
   filesToUpload.value = [];
+}
+
+async function del() {
+  const ids = albumns.value
+    .filter((item) => item.checked == true)
+    .map((item) => item.category_id);
+
+  if (ids.length == 0) {
+    alert("削除対象を1件以上選択してください。");
+  }
+  const { data } = await deleteAlbums(ids);
 }
 </script>
