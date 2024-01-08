@@ -17,7 +17,8 @@ export const fetchCategory = async () => {
 }
 
 export const deleteAlbums = async (ids: Array<number>) => {
-  return await useApiFetch("/api/bc/admin/albums/uploaded",
+  const { $showAlert } = useNuxtApp();
+  const { data, status, error } = await useApiFetch("/api/bc/admin/albums/uploaded",
     {
       method: 'delete',
       body: {
@@ -25,4 +26,14 @@ export const deleteAlbums = async (ids: Array<number>) => {
       }
     }
   );
+
+  if (status.value == "success") {
+    $showAlert("success", "成功", data.value.message);
+    return;
+  }
+
+  if (status.value == "error") {
+    const errMessage = error.value.data.message;
+    $showAlert("error", "失敗", errMessage);
+  }
 }

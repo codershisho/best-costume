@@ -14,7 +14,7 @@ class Album extends Controller
     public function index(Request $request)
     {
         $query = FileCategory::query();
-        if ($request->has('category_id') && isset($request->category_id)) {
+        if ($request->has('category_id') && isset($request->category_id) && $request->category_id != 1) {
             $query->where('category_id', $request->category_id);
         }
         $data = $query->paginate(10);
