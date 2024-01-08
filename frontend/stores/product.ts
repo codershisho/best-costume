@@ -9,7 +9,9 @@ export const useProductStore = defineStore('product', {
       pages: 0,
       pageLength: 0,
       customerId: 0,
-      products: []
+      products: [],
+      productName: '',    // グローバルな商品名検索
+      isLikeSearch: false  // グローバスなお気に入り検索
     }
   }),
 
@@ -31,12 +33,22 @@ export const useProductStore = defineStore('product', {
     setCustomerId(v: number) {
       this._product.customerId = v;
     },
+    setProductName(v: string) {
+      this._product.productName = v;
+      this.searchProducts();
+    },
+    setIsLikeSearch() {
+      this._product.isLikeSearch = !this._product.isLikeSearch;
+      this.searchProducts();
+    },
     clear() {
       this._product.selected = 0;
       this._product.pages = 0;
       this._product.pageLength = 0;
       this._product.customerId = 0;
       this._product.products = [];
+      this._product.productName = '';
+      this._product.isLikeSearch = false;
     },
     /**
      * 商品一覧検索
@@ -45,7 +57,16 @@ export const useProductStore = defineStore('product', {
       const params = {
         customer_id: this._product.customerId,
         page: this._product.pages,
-        category: this._product.selected
+        category: this._product.selected,
+        isLikeSearch: this._product.isLikeSearch
+      }
+      // グローバルな商品検索の場合は、カテゴリーを除外する
+      if (this._product.productName != '') {
+        params.searchText = this._product.productName
+        delete params.category;
+      }
+      if (this._product.isLikeSearch) {
+        delete params.category;
       }
       const { data } = await useApiFetch('api/bc/master/products/search', {
         method: 'get',
@@ -72,7 +93,7 @@ export const useProductStore = defineStore('product', {
      * 商品注文登録
      * @param productId 
      */
-    order(productId: number) {
+    async order(productId: number) {
       return useApiFetch(`api/bc/customer/${this._product.customerId}/orders`, {
         method: 'post',
         body: {

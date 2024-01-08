@@ -41,6 +41,12 @@ class Product extends Controller
         if ($request->has('searchText')) {
             $query = $query->where('name', 'like', '%' . $request->searchText . '%');
         }
+        // お気に入り検索
+        if ($request->has('isLikeSearch') && $request->isLikeSearch == 'true') {
+            $query = $query->whereHas('favorite', function ($q) {
+                $q->whereNotNull('id');
+            });
+        }
         $data = $query->paginate(50);
         return ProductResource::collection($data);
     }

@@ -2,15 +2,31 @@
   <v-app class="bg-back">
     <header class="tw-flex tw-justify-between tw-p-8">
       <div class="tw-w-48">
-        <img src="../oddo_logo.png">
+        <img src="../oddo_logo.png" />
       </div>
       <div class="tw-flex tw-w-80 tw-gap-5">
-        <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
-          density="compact" variant="solo" placeholder="衣装名を検索">
+        <v-text-field
+          class="mr-2"
+          bg-color="white"
+          hide-details
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          density="compact"
+          variant="solo"
+          placeholder="衣装名を検索"
+          v-model="productName"
+          @update:model-value="updProductName"
+        >
         </v-text-field>
-        <NuxtLink to="favorite">
-          <v-btn width="40px" height="40px" class="heart-color" density="default" icon="mdi-heart"></v-btn>
-        </NuxtLink>
+
+        <v-btn
+          width="40px"
+          height="40px"
+          class="heart-color"
+          density="default"
+          icon="mdi-heart"
+          @click="productStore.setIsLikeSearch"
+        ></v-btn>
       </div>
     </header>
     <div class="tw-flex tw-h-full">
@@ -19,13 +35,22 @@
           <h2 class="tw-font-bold tw-text-2xl">Category</h2>
           <v-expansion-panels v-for="(menu, i) in menus">
             <v-expansion-panel bg-color="primary">
-              <v-expansion-panel-title class="tw-font-bold" expand-icon="mdi-plus" collapse-icon="mdi-minus">
+              <v-expansion-panel-title
+                class="tw-font-bold"
+                expand-icon="mdi-plus"
+                collapse-icon="mdi-minus"
+              >
                 {{ menu.name }}
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
                 <v-list class="tw-w-full !tw-p-0" bg-color="white">
-                  <v-list-item v-for="(child, i) in menu.children" key="i" :value="child.id" :title="child.name"
-                    @click="selectCategory(child.id)">
+                  <v-list-item
+                    v-for="(child, i) in menu.children"
+                    key="i"
+                    :value="child.id"
+                    :title="child.name"
+                    @click="selectCategory(child.id)"
+                  >
                   </v-list-item>
                 </v-list>
               </v-expansion-panel-text>
@@ -36,13 +61,22 @@
           <div class="tw-mt-6">
             <h2 class="tw-font-bold tw-text-2xl tw-mb-4">Sample Album</h2>
             <div>
-              <v-img class="tw-rounded-lg" aspect-ratio="1" cover
-                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+              <v-img
+                class="tw-rounded-lg"
+                aspect-ratio="1"
+                cover
+                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+              ></v-img>
             </div>
           </div>
         </NuxtLink>
         <div class="tw-text-center tw-mt-auto">
-          <v-btn text="サインアウト" variant="text" prepend-icon="mdi-logout" @click="authStore.logout" />
+          <v-btn
+            text="サインアウト"
+            variant="text"
+            prepend-icon="mdi-logout"
+            @click="authStore.logout"
+          />
         </div>
       </div>
       <div class="tw-w-full tw-p-6">
@@ -53,28 +87,30 @@
 </template>
 
 <script setup lang="ts">
-import { useProductStore } from '~/stores/product';
-import { Menu } from '../types/menu';
+import { useProductStore } from "~/stores/product";
+import { Menu } from "../types/menu";
 
-const urlPathCustomerId = useRoute().params.id
+const urlPathCustomerId = useRoute().params.id;
 const menus = ref<Menu[]>([]);
 const authStore = useAuthStore();
 const productStore = useProductStore();
+// グローバルな商品名検索の商品名格納
+const productName = ref("");
 productStore.clear();
 
+productStore.setCustomerId(Number(urlPathCustomerId));
 searchMenus();
 
 /** メニューの検索 */
 async function searchMenus() {
-  const { data } = await useApiFetch(
-    'api/bc/master/menus'
-  );
+  productStore.clear();
+  const { data } = await useApiFetch("api/bc/master/menus");
   menus.value = data.value.data;
 }
 
 /**
  * メニューに応じた商品検索
- * @param id 
+ * @param id
  */
 function selectCategory(id: number) {
   productStore.setCategory(id);
@@ -82,6 +118,11 @@ function selectCategory(id: number) {
   productStore.searchProducts();
 }
 
+/** 検索対象の商品名を更新 */
+function updProductName(productName: string) {
+  productStore.setCustomerId(Number(urlPathCustomerId));
+  productStore.setProductName(productName);
+}
 </script>
 
 <style>
@@ -89,11 +130,11 @@ function selectCategory(id: number) {
   display: none;
 }
 
-.st_side-menu>.v-expansion-panel-text__wrapper {
+.st_side-menu > .v-expansion-panel-text__wrapper {
   padding: 0;
 }
 
 .heart-color {
-  color: #FF4C24;
+  color: #ff4c24;
 }
 </style>
