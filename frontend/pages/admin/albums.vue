@@ -1,23 +1,54 @@
 <template>
   <v-sheet class="d-flex tw-justify-between tw-items-center pa-5 rounded-lg">
     <div class="tw-w-full tw-pr-12">
-      <input type="file" multiple accept=".jpg, .jpeg, .png" @change="handleFileChange" />
+      <input
+        type="file"
+        multiple
+        accept=".jpg, .jpeg, .png"
+        @change="handleFileChange"
+      />
     </div>
     <div class="tw-flex tw-items-center tw-gap-4">
       <div class="tw-w-full">
-        <v-select v-model="selectedCategory" :items="categories" label="カテゴリー" item-title="name" item-value="id"
-          variant="solo-filled" flat density="compact" hide-details="auto" class="tw-w-36"></v-select>
+        <v-select
+          v-model="selectedCategory"
+          :items="categories"
+          label="カテゴリー"
+          item-title="name"
+          item-value="id"
+          variant="solo-filled"
+          flat
+          density="compact"
+          hide-details="auto"
+          class="tw-w-36"
+        ></v-select>
       </div>
       <div class="tw-w-full">
-        <BaseButton text="アップロード" color="primary" @click="uploadFiles" class="!tw-h-auto !tw-py-3 !tw-px-4"></BaseButton>
+        <BaseButton
+          text="アップロード"
+          color="primary"
+          @click="uploadFiles"
+          class="!tw-h-auto !tw-py-3 !tw-px-4"
+        ></BaseButton>
       </div>
     </div>
   </v-sheet>
   <div class="pt-5">
     <div class="d-flex">
-      <v-chip-group class="tw-w-4/6 tw-gap-2 tw-mb-4" color="#E65100" variant="tonal" v-model="filterCategory"
-        @update:modelValue="searchAlbums">
-        <v-chip v-for="(category, i) in categories" :key="i" label class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center !tw-h-auto !tw-py-2" :value="category.id">
+      <v-chip-group
+        class="tw-w-4/6 tw-gap-2 tw-mb-4"
+        color="#E65100"
+        variant="tonal"
+        v-model="filterCategory"
+        @update:modelValue="searchAlbums"
+      >
+        <v-chip
+          v-for="(category, i) in categories"
+          :key="i"
+          label
+          class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center !tw-h-auto !tw-py-2"
+          :value="category.id"
+        >
           <div>
             {{ category.name }}
           </div>
@@ -54,7 +85,11 @@
       </tbody>
     </v-table>
     <div class="text-center">
-      <v-pagination v-model="page" :length="pageLength" @update:modelValue="searchAlbums"></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="pageLength"
+        @update:modelValue="searchAlbums"
+      ></v-pagination>
     </div>
   </div>
 </template>
@@ -158,11 +193,12 @@ async function uploadFiles() {
 async function del() {
   const ids = albumns.value
     .filter((item) => item.checked == true)
-    .map((item) => item.category_id);
+    .map((item) => item.id);
 
   if (ids.length == 0) {
     alert("削除対象を1件以上選択してください。");
   }
-  const { data } = await deleteAlbums(ids);
+  await deleteAlbums(ids);
+  searchAlbums();
 }
 </script>

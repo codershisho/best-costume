@@ -7,11 +7,11 @@
           v-for="(category, i) in categories"
           :color="category.color"
           label
+          :value="category.id"
         >
           {{ category.name }}
         </v-chip>
       </v-chip-group>
-      <!-- {{ categories }} -->
     </div>
     <div class="d-flex flex-wrap tw-gap-6">
       <div v-for="album in albums" class="d-flex">
