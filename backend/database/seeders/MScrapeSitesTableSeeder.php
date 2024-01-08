@@ -14,6 +14,7 @@ class MScrapeSitesTableSeeder extends Seeder
 
         $data = [
             ['name' => 'RENCA', 'url' => 'https://renca.jp/', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => '京都かしいしょう', 'url' => 'https://kyoto-kashiisyo.jp/', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         MScrapeSite::insert($data);

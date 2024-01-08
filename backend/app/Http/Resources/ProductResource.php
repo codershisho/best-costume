@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ProductResource extends JsonResource
 {
@@ -14,7 +15,10 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'category_id' => $this->category_id,
             'thumbnail' => $this->thumbnail(),
-            'favorite' => $this->getFavorite()
+            'favorite' => $this->getFavorite(),
+            'site' => $this->site->msite ?? '',
+            'menu' => $this->getMenu(),
+            'updated_at' => $this->updated_at->format('Y-m-d h:i:s'),
         ];
     }
 
@@ -25,6 +29,16 @@ class ProductResource extends JsonResource
      */
     private function thumbnail()
     {
+        if (!isset($this->site->images)) {
+            // 自前の衣装の場合storageから画像をとってくる
+            $files = Storage::files('public/ownProducts/' . $this->id);
+            if (empty($files)) {
+                return '';
+            }
+            $thumbnail = $files[0];
+            $thumbnail = str_replace('public/', '', $thumbnail);
+            return asset('storage/' . $thumbnail);
+        }
         $images = explode(",", $this->site->images);
         return $images[0];
     }
@@ -40,5 +54,17 @@ class ProductResource extends JsonResource
             return true;
         }
         return false;
+    }
+
+    /**
+     * 親メニューと子メニュー名を結合して返す
+     *
+     * @return void
+     */
+    private function getMenu()
+    {
+        $menuName = $this->menu->name;
+        $parentMenuName = $this->menu->parent->name;
+        return $parentMenuName . ' > ' . $menuName;
     }
 }

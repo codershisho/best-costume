@@ -12,4 +12,9 @@ class TScrapeSite extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function msite()
+    {
+        return $this->belongsTo('App\Models\MScrapeSite', 'site_id', 'id');
+    }
 }

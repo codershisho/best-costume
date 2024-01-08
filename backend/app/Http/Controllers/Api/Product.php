@@ -25,6 +25,9 @@ class Product extends Controller
         $query = MProduct::query();
         $query = $query->with([
             'site',
+            'site.msite',
+            'menu',
+            'menu.parent',
             'favorite' => function ($query) use ($customerId) {
                 // 各ユーザーのお気に入り情報も一緒に取る
                 $query->where('customer_id', $customerId);
@@ -33,6 +36,16 @@ class Product extends Controller
         // カテゴリーで絞り込み
         if ($request->has('category')) {
             $query = $query->where('category_id', $request->category);
+        }
+        // 衣装名で絞り込み
+        if ($request->has('searchText')) {
+            $query = $query->where('name', 'like', '%' . $request->searchText . '%');
+        }
+        // お気に入り検索
+        if ($request->has('isLikeSearch') && $request->isLikeSearch == 'true') {
+            $query = $query->whereHas('favorite', function ($q) {
+                $q->whereNotNull('id');
+            });
         }
         $data = $query->paginate(50);
         return ProductResource::collection($data);
@@ -58,19 +71,48 @@ class Product extends Controller
         try {
             DB::beginTransaction();
 
-            // 既存サイトとかぶってないかチェック
-            $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
-            if ($isExist) {
-                throw new Exception('すでにそのサイトは商品登録済みです');
-            }
+            // 外部サイトからの商品登録の場合のみ
+            // if ($request->scrape_site_id != 0) {
+            //     // 既存サイトとかぶってないかチェック
+            //     $isExist = MProduct::where('scrape_site_id', $request->scrape_site_id)->exists();
+            //     if ($isExist) {
+            //         throw new Exception('すでにそのサイトは商品登録済みです');
+            //     }
+            // }
 
             $model = new MProduct();
             $model->fill($request->all());
             $model->save();
 
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+                $productId = $model->id;
+                foreach ($files as $file) {
+                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('public/ownProducts/' . $productId, $fileName);
+                    $filePath = str_replace('public/', '', $filePath);
+                }
+            }
+
             DB::commit();
 
             return response()->json(['message' => '商品登録完了しました']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $ids = collect($request->ids)->toArray();
+            MProduct::destroy($ids);
+
+            DB::commit();
+            return response()->json(['message' => '商品削除完了しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

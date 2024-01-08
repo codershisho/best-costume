@@ -34,4 +34,26 @@ class Album extends Controller
 
         return response()->json(['message' => 'アップロードされたファイルがありません'], 400);
     }
+
+    /**
+     * アルバムの削除
+     * - 配列でidでわたってくる
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function delete(Request $request)
+    {
+        $ids = collect($request->ids);
+        $ids->each(function ($id) {
+            // データの削除
+            $m = FileCategory::find($id);
+            $m->delete();
+
+            // 実ファイルの削除
+            $filePath = $m->file_path;
+            Storage::disk('public')->delete($filePath);
+        });
+        return response()->json(['message' => 'アルバムを削除しました。']);
+    }
 }

@@ -23,10 +23,14 @@
           </div>
         </v-chip>
       </v-chip-group>
+      <v-btn color="error" @click="del">削除</v-btn>
     </div>
     <v-table class="pa-5 rounded-lg">
       <thead>
         <tr>
+          <th class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="selectAll" />
+          </th>
           <th>カテゴリー</th>
           <th>イメージ</th>
           <th>追加日</th>
@@ -34,6 +38,9 @@
       </thead>
       <tbody>
         <tr v-for="(albumn, i) in albumns" :key="i">
+          <td class="!tw-w-2 !tw-px-2">
+            <input type="checkbox" v-model="albumn.checked" />
+          </td>
           <td>
             <v-chip :color="albumn.category_color" label>
               {{ albumn.category_name }}
@@ -53,10 +60,11 @@
 </template>
 
 <script setup lang="ts">
-import { Category } from '~/types/Album';
+import { fetchCategory } from "~/composables/albumApi";
+import { Category } from "~/types/Album";
 
 definePageMeta({
-  layout: 'admin',
+  layout: "admin",
 });
 
 const { $showAlert } = useNuxtApp();
@@ -67,6 +75,7 @@ const filterCategory = ref(null);
 const albumns = ref([]);
 const page = ref(1);
 const pageLength = ref(1);
+const selectAll = ref<boolean | null>(false);
 
 searchCategories();
 searchAlbums();
@@ -78,21 +87,25 @@ const handleFileChange = (event: Event) => {
   }
 };
 
+/** チェックボックスの選択状態をwatch */
+watch(selectAll, (newVal) => {
+  albumns.value.forEach((albumn) => (albumn.checked = newVal));
+});
+watch(
+  () => "albumns.*.checked",
+  (newVal) => {
+    albumns.value.forEach((albumn) => (albumn.checked = newVal));
+    const allChecked = albumns.value.every((albumn) => albumn.checked);
+    const someChecked = albumns.value.some((albumn) => albumn.checked);
+    selectAll.value = allChecked ? true : someChecked ? null : false;
+  }
+);
+
 /**
  * 一覧検索
  */
 async function searchAlbums() {
-  const params = {};
-  if (filterCategory != null) {
-    params.category_id = filterCategory.value;
-  }
-  const { data } = await useApiFetch(
-    `/api/bc/admin/albums/uploaded?page=${page.value}`,
-    {
-      method: 'get',
-      params: params,
-    }
-  );
+  const { data } = await fetchAlbums(Number(filterCategory.value), page.value);
   albumns.value = data.value.data;
   pageLength.value = data.value.meta.last_page;
 }
@@ -101,7 +114,7 @@ async function searchAlbums() {
  * カテゴリーマスタ検索
  */
 async function searchCategories() {
-  const { data } = await useApiFetch('/api/bc/master/categories');
+  const { data } = await fetchCategory();
   categories.value = data.value;
 }
 
@@ -110,35 +123,46 @@ async function searchCategories() {
  */
 async function uploadFiles() {
   if (filesToUpload.value.length === 0) {
-    $showAlert('warning', '', 'アップロードするファイルが選択されていません');
+    $showAlert("warning", "", "アップロードするファイルが選択されていません");
     return;
   }
 
   if (selectedCategory.value == null) {
-    $showAlert('warning', '', 'カテゴリーが選択されていません');
+    $showAlert("warning", "", "カテゴリーが選択されていません");
     return;
   }
 
   const formData = new FormData();
   filesToUpload.value.forEach((file) => {
-    formData.append('files[]', file);
+    formData.append("files[]", file);
   });
-  formData.append('selectedCategory', selectedCategory.value);
-  const response = await useApiFetch('/api/bc/admin/albums/upload', {
-    method: 'POST',
+  formData.append("selectedCategory", selectedCategory.value);
+  const response = await useApiFetch("/api/bc/admin/albums/upload", {
+    method: "POST",
     body: formData,
   });
 
-  if (response.status.value == 'success') {
-    $showAlert('success', 'アップロード完了', response.data.value.message);
+  if (response.status.value == "success") {
+    $showAlert("success", "アップロード完了", response.data.value.message);
     searchAlbums();
   } else {
     $showAlert(
-      'error',
-      'アップロード失敗',
-      '容量が制限を超えている可能性があります。'
+      "error",
+      "アップロード失敗",
+      "容量が制限を超えている可能性があります。"
     );
   }
   filesToUpload.value = [];
+}
+
+async function del() {
+  const ids = albumns.value
+    .filter((item) => item.checked == true)
+    .map((item) => item.category_id);
+
+  if (ids.length == 0) {
+    alert("削除対象を1件以上選択してください。");
+  }
+  const { data } = await deleteAlbums(ids);
 }
 </script>

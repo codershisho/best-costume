@@ -46,6 +46,7 @@ Route::prefix('bc')->group(function () {
         Route::prefix('albums')->group(function () {
             Route::get('/uploaded', [Album::class, 'index']);
             Route::post('/upload', [Album::class, 'upload']);
+            Route::delete('/uploaded', [Album::class, 'delete']);
         });
         Route::prefix('scrape')->group(function () {
             Route::get('/sites', [WebScraping::class, 'site']);
@@ -67,6 +68,7 @@ Route::prefix('bc')->group(function () {
             Route::get('/search', [Product::class, 'search']);
             Route::get('/{id}', [Product::class, 'show']);
             Route::post('/', [Product::class, 'store']);
+            Route::delete('/', [Product::class, 'delete']);
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);
