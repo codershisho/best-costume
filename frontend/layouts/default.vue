@@ -103,7 +103,6 @@ searchMenus();
 
 /** メニューの検索 */
 async function searchMenus() {
-  productStore.clear();
   const { data } = await useApiFetch("api/bc/master/menus");
   menus.value = data.value.data;
 }
