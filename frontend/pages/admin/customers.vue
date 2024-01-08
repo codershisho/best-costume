@@ -6,9 +6,9 @@
   <div class="mt-2">
     <v-sheet class="mb-3 pl-3 rounded-lg">
       <div class="d-flex tw-items-center">
-        <v-chip-group class="tw-w-4/6" color="#E65100" variant="tonal" v-model="selectedStatus"
+        <v-chip-group class="tw-w-4/6 tw-gap-2" color="#E65100" variant="tonal" v-model="selectedStatus"
           @update:modelValue="filter">
-          <v-chip v-for="(status, i) in statuses" :key="i" label :value="status.id">
+          <v-chip v-for="(status, i) in statuses" :key="i" label :value="status.id" class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center">
             <div>
               {{ status.name }}
             </div>
@@ -39,7 +39,7 @@
           <td>{{ customer.phone }}</td>
           <td>{{ customer.visit_date }}</td>
           <td>
-            <v-chip :color="customer.status_color" label class="tw-w-10/12">
+            <v-chip :color="customer.status_color" label class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center">
               {{ customer.status_name }}
             </v-chip>
           </td>
