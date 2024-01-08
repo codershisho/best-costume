@@ -19,6 +19,7 @@
         hide-details="auto"
         :rules="[requiredValidation]"
         v-model="parent"
+        @update:model-value="selectedMenu = null"
       />
       <v-select
         class="py-3"
@@ -82,13 +83,14 @@ const product = ref<ProductRegist>({
 // メニュー関連
 const menus = ref<Menu[]>();
 const parent = ref(null);
+const selectedMenu = ref(null);
+
 const children = computed(() => {
   if (parent.value == null) {
     return [];
   }
   return menus.value[parent.value - 1].children;
 });
-const selectedMenu = ref(null);
 
 // バリデーション
 const valid = ref(false);
@@ -105,9 +107,11 @@ async function setMenus() {
 async function onSave() {
   product.value.category_id = selectedMenu.value;
   const formData = new FormData();
-  product.value.images.forEach((file) => {
-    formData.append("files[]", file);
-  });
+  if (product.value.images != null) {
+    product.value.images.forEach((file) => {
+      formData.append("files[]", file);
+    });
+  }
   for (const key of Object.keys(product.value)) {
     formData.append(key, product.value[key]);
   }
