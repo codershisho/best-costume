@@ -1,23 +1,29 @@
 <template>
-  <v-dialog width="500" v-model="value">
-    <v-card title="新規追加">
-      <div class="px-5 py-3">
-        <div class="pa-2">カテゴリー</div>
-        <BaseText placeholder="カテゴリー" v-model="data.name"></BaseText>
-        <div class="pa-2">カラーコード</div>
-        <v-color-picker v-model="data.color" mode="hex"></v-color-picker>
-        <div class="d-flex">
+  <v-dialog class="tw-text-center" width="364" v-model="value">
+    <v-card>
+      <div class="tw-p-8 tw-flex tw-flex-col tw-gap-6">
+        <div>
+          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">カテゴリー名</div>
+          <BaseText placeholder="カテゴリー" v-model="data.name"></BaseText>
+        </div>
+        <div>
+          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">カテゴリーカラー</div>
+          <v-color-picker v-model="data.color" mode="hex" class="tw-m-auto"></v-color-picker>
+        </div>
+        <div class="d-flex tw-justify-between">
           <BaseButton
-            text="close"
+            text="キャンセル"
             variant="outlined"
             @click="value = false"
+            class="tw-w-[144px] tw-opacity-50"
           ></BaseButton>
           <v-spacer></v-spacer>
           <BaseButton
-            text="save"
+            text="作成"
             variant="tonal"
             color="primary"
             @click="onSave"
+            class="tw-w-[144px]"
           ></BaseButton>
         </div>
       </div>

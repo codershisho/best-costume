@@ -1,30 +1,29 @@
 <template>
-  <v-tabs v-model="tab" bg-color="deep-purple-accent-4" centered>
-    <v-tab value="status">
-      <v-icon class="mr-3">mdi-phone</v-icon>
-      status
-    </v-tab>
+  <div class="tw-bg-white tw-mb-4 tw-rounded-lg">
+    <h2 class="tw-font-bold tw-text-xl tw-p-4">設定</h2>
+    <v-tabs v-model="tab" class="tw-mb-6e">
+      <v-tab value="status">
+        <v-icon class="mr-3">mdi-list-box-outline</v-icon>
+        管理ステータス
+      </v-tab>
 
-    <v-tab value="category">
-      <v-icon class="mr-3">mdi-heart</v-icon>
-      category
-    </v-tab>
-  </v-tabs>
+      <v-tab value="category">
+        <v-icon class="mr-3">mdi-image</v-icon>
+        アルバムカテゴリー
+      </v-tab>
+    </v-tabs>
+  </div>
 
-  <v-window v-model="tab">
-    <v-window-item :value="'status'">
-      <BaseButton text="新規作成" color="primary" @click="onNew"></BaseButton>
-      <dialog-status
-        v-model="dialog"
-        :data="selectedRow"
-        :isInsert="isInsert"
-      ></dialog-status>
+  <v-window v-model="tab" class="tw-gap-6">
+    <v-window-item :value="'status'" class="tw-flex tw-flex-col tw-gap-4">
+      <BaseButton text="新規作成" color="primary" @click="onNew" class="tw-ml-auto tw-mr-0"></BaseButton>
+      <dialog-status v-model="dialog" :data="selectedRow" :isInsert="isInsert"></dialog-status>
       <v-table class="pa-5 rounded-lg">
         <thead>
           <tr>
             <th>ID</th>
             <th>ステータス</th>
-            <th>カラーコード</th>
+            <th>ステータスカラー</th>
           </tr>
         </thead>
         <tbody>
@@ -38,31 +37,19 @@
         </tbody>
       </v-table>
     </v-window-item>
-    <v-window-item :value="'category'">
-      <BaseButton
-        text="新規作成"
-        color="primary"
-        @click="onNewCategory"
-      ></BaseButton>
-      <DialogCategory
-        v-model="dialogCategory"
-        :data="selectedRowCategory"
-        :isInsert="isInsertCategory"
-      ></DialogCategory>
+    <v-window-item :value="'category'" class="tw-flex tw-flex-col tw-gap-4">
+      <BaseButton text="新規作成" color="primary" @click="onNewCategory" class="tw-ml-auto tw-mr-0"></BaseButton>
+      <DialogCategory v-model="dialogCategory" :data="selectedRowCategory" :isInsert="isInsertCategory"></DialogCategory>
       <v-table class="pa-5 rounded-lg">
         <thead>
           <tr>
             <th>ID</th>
             <th>カテゴリー名</th>
-            <th>カラーコード</th>
+            <th>カテゴリーカラー</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(category, i) in categories"
-            :key="i"
-            @click="onRowCategory(category)"
-          >
+          <tr v-for="(category, i) in categories" :key="i" @click="onRowCategory(category)">
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>
