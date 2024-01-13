@@ -78,7 +78,7 @@
           :rules="[requiredValidation]"
         ></v-textarea>
         <BaseButton
-          class="mt-3"
+          class="mt-3 tw-w-full"
           color="blue-accent-3"
           text="商品登録"
           :disabled="!valid"
