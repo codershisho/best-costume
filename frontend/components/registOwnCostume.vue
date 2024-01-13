@@ -48,19 +48,20 @@
         v-model="product.description"
         :rules="[requiredValidation]"
       ></v-textarea>
-      <BaseButton
-        class="mt-3"
-        color="blue-accent-3"
-        text="商品登録"
-        :disabled="!valid"
-        @click="onSave"
-      ></BaseButton>
+      <p class="mb-3 tw-text-slate-600">商品画像</p>
       <input
         type="file"
         multiple
         accept=".jpg, .jpeg, .png"
         @change="handleFileChange"
       />
+      <BaseButton
+        class="mt-8 tw-w-full"
+        color="blue-accent-3"
+        text="商品登録"
+        :disabled="!valid"
+        @click="onSave"
+      ></BaseButton>
     </v-form>
   </v-sheet>
 </template>

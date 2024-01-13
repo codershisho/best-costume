@@ -1,7 +1,7 @@
 <template>
   <div class="tw-bg-white tw-mb-4 tw-rounded-lg">
     <h2 class="tw-font-bold tw-text-xl tw-p-4">設定</h2>
-    <v-tabs v-model="tab" class="tw-mb-6e">
+    <v-tabs v-model="tab" class="tw-mb-6">
       <v-tab value="status">
         <v-icon class="mr-3">mdi-list-box-outline</v-icon>
         管理ステータス
