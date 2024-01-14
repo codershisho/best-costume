@@ -2,7 +2,7 @@
   <div class="d-flex justify-center align-center tw-h-screen">
     <div>
       <div class="tw-w-60 tw-m-auto tw-mb-4">
-        <img src="oddo_logo.png" />
+        <img src="/public/oddo_logo.png" />
       </div>
       <div class="text-center tw-text-2xl tw-text-gray-500">
         Customer Costume Selection Application
