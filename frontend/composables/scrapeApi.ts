@@ -1,10 +1,10 @@
 export const searchScrapeSite = async () => {
   return await useApiFetch("api/bc/admin/scrape/sites");
-}
+};
 
 export const execScrape = async (siteId: number, url: string) => {
   const { $showAlert } = useNuxtApp();
-  const res = await useApiFetch("api/bc/admin/scrape", {
+  const res = await useApiFetch("/api/bc/admin/scrape", {
     method: "post",
     body: {
       site_id: siteId,
@@ -22,4 +22,4 @@ export const execScrape = async (siteId: number, url: string) => {
     const errMessage = res.error.value.data.message;
     $showAlert("error", "スクレイピングに失敗", errMessage);
   }
-}
+};

@@ -16,8 +16,17 @@
 
   <v-window v-model="tab" class="tw-gap-6">
     <v-window-item :value="'status'" class="tw-flex tw-flex-col tw-gap-4">
-      <BaseButton text="新規作成" color="primary" @click="onNew" class="tw-ml-auto tw-mr-0"></BaseButton>
-      <dialog-status v-model="dialog" :data="selectedRow" :isInsert="isInsert"></dialog-status>
+      <BaseButton
+        text="新規作成"
+        color="primary"
+        @click="onNew"
+        class="tw-ml-auto tw-mr-0"
+      ></BaseButton>
+      <dialog-status
+        v-model="dialog"
+        :data="selectedRow"
+        :isInsert="isInsert"
+      ></dialog-status>
       <v-table class="pa-5 rounded-lg">
         <thead>
           <tr>
@@ -38,8 +47,17 @@
       </v-table>
     </v-window-item>
     <v-window-item :value="'category'" class="tw-flex tw-flex-col tw-gap-4">
-      <BaseButton text="新規作成" color="primary" @click="onNewCategory" class="tw-ml-auto tw-mr-0"></BaseButton>
-      <DialogCategory v-model="dialogCategory" :data="selectedRowCategory" :isInsert="isInsertCategory"></DialogCategory>
+      <BaseButton
+        text="新規作成"
+        color="primary"
+        @click="onNewCategory"
+        class="tw-ml-auto tw-mr-0"
+      ></BaseButton>
+      <DialogCategory
+        v-model="dialogCategory"
+        :data="selectedRowCategory"
+        :isInsert="isInsertCategory"
+      ></DialogCategory>
       <v-table class="pa-5 rounded-lg">
         <thead>
           <tr>
@@ -49,7 +67,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(category, i) in categories" :key="i" @click="onRowCategory(category)">
+          <tr
+            v-for="(category, i) in categories"
+            :key="i"
+            @click="onRowCategory(category)"
+          >
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>
@@ -64,10 +86,10 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'admin',
+  layout: "admin",
 });
 
-const tab = ref('');
+const tab = ref("");
 const dialog = ref(false);
 const dialogCategory = ref(false);
 
@@ -83,12 +105,12 @@ searhStatus();
 searhCategory();
 
 async function searhStatus() {
-  const { data } = await useApiFetch('/api/bc/master/statuses');
+  const { data } = await useApiFetch("/api/bc/master/statuses");
   statuses.value = data.value;
 }
 
 async function searhCategory() {
-  const { data } = await useApiFetch('api/bc/master/categories');
+  const { data } = await useApiFetch("/api/bc/master/categories");
   categories.value = data.value;
 }
 

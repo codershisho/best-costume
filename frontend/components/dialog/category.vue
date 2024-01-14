@@ -3,12 +3,20 @@
     <v-card>
       <div class="tw-p-8 tw-flex tw-flex-col tw-gap-6">
         <div>
-          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">カテゴリー名</div>
+          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">
+            カテゴリー名
+          </div>
           <BaseText placeholder="カテゴリー" v-model="data.name"></BaseText>
         </div>
         <div>
-          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">カテゴリーカラー</div>
-          <v-color-picker v-model="data.color" mode="hex" class="tw-m-auto"></v-color-picker>
+          <div class="tw-text-left tw-mb-2 tw-font-bold tw-text-sm">
+            カテゴリーカラー
+          </div>
+          <v-color-picker
+            v-model="data.color"
+            mode="hex"
+            class="tw-m-auto"
+          ></v-color-picker>
         </div>
         <div class="d-flex tw-justify-between">
           <BaseButton
@@ -48,14 +56,14 @@ const props = defineProps({
 });
 
 const { $showAlert } = useNuxtApp();
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 
 const value = computed({
   get() {
     return props.modelValue;
   },
   set(value) {
-    emit('update:modelValue', value);
+    emit("update:modelValue", value);
   },
 });
 
@@ -70,22 +78,22 @@ async function onSave() {
 async function fetchData(url, method, body) {
   const { data, status, error } = await useApiFetch(url, { method, body });
 
-  if (status.value === 'success') {
-    $showAlert('success', '成功', data.value.message);
-  } else if (status.value === 'error') {
+  if (status.value === "success") {
+    $showAlert("success", "成功", data.value.message);
+  } else if (status.value === "error") {
     const errMessage = error.value.data.message;
-    $showAlert('error', '失敗', errMessage);
+    $showAlert("error", "失敗", errMessage);
   }
 }
 
 async function store() {
-  await fetchData('api/bc/master/categories', 'post', props.data);
+  await fetchData("/api/bc/master/categories", "post", props.data);
 }
 
 async function update() {
   await fetchData(
-    `api/bc/master/categories/${props.data.id}`,
-    'put',
+    `/api/bc/master/categories/${props.data.id}`,
+    "put",
     props.data
   );
 }
