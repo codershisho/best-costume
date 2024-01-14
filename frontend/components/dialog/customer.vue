@@ -32,15 +32,15 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"]);
 const isActive = ref(false);
-const name = ref('');
-const phone = ref('');
+const name = ref("");
+const phone = ref("");
 const { $swal } = useNuxtApp();
 
 async function onSave() {
-  await useApiFetch('api/bc/admin/customers', {
-    method: 'post',
+  await useApiFetch("/api/bc/admin/customers", {
+    method: "post",
     body: {
       name: name,
       phone: phone,
@@ -50,16 +50,16 @@ async function onSave() {
   isActive.value = false;
 
   $swal.fire({
-    title: '登録完了',
-    icon: 'success',
+    title: "登録完了",
+    icon: "success",
     toast: true,
-    position: 'top-end', //画面右上
+    position: "top-end", //画面右上
     showConfirmButton: false,
     timer: 3000, //3秒経過後に閉じる
-    background: '#2A73C5',
-    color: '#FFFFFF',
+    background: "#2A73C5",
+    color: "#FFFFFF",
   });
 
-  emit('close');
+  emit("close");
 }
 </script>

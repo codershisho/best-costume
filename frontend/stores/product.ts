@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia';
-import { useApiFetch } from '~/composables/useApiFetch';
-import { Product } from '~/types/product';
+import { defineStore } from "pinia";
+import { useApiFetch } from "~/composables/useApiFetch";
+import { Product } from "~/types/product";
 
-export const useProductStore = defineStore('product', {
+export const useProductStore = defineStore("product", {
   state: () => ({
     _product: {
       selected: 0,
@@ -10,9 +10,9 @@ export const useProductStore = defineStore('product', {
       pageLength: 0,
       customerId: 0,
       products: [],
-      productName: '',    // グローバルな商品名検索
-      isLikeSearch: false  // グローバスなお気に入り検索
-    }
+      productName: "", // グローバルな商品名検索
+      isLikeSearch: false, // グローバスなお気に入り検索
+    },
   }),
 
   getters: {
@@ -47,7 +47,7 @@ export const useProductStore = defineStore('product', {
       this._product.pageLength = 0;
       this._product.customerId = 0;
       this._product.products = [];
-      this._product.productName = '';
+      this._product.productName = "";
       this._product.isLikeSearch = false;
     },
     /**
@@ -58,19 +58,19 @@ export const useProductStore = defineStore('product', {
         customer_id: this._product.customerId,
         page: this._product.pages,
         category: this._product.selected,
-        isLikeSearch: this._product.isLikeSearch
-      }
+        isLikeSearch: this._product.isLikeSearch,
+      };
       // グローバルな商品検索の場合は、カテゴリーを除外する
-      if (this._product.productName != '') {
-        params.searchText = this._product.productName
+      if (this._product.productName != "") {
+        params.searchText = this._product.productName;
         delete params.category;
       }
       if (this._product.isLikeSearch) {
         delete params.category;
       }
-      const { data } = await useApiFetch('api/bc/master/products/search', {
-        method: 'get',
-        params: params
+      const { data } = await useApiFetch("/api/bc/master/products/search", {
+        method: "get",
+        params: params,
       });
       this._product.products = data.value.data;
       this._product.pageLength = data.value.meta.last_page;
@@ -81,29 +81,35 @@ export const useProductStore = defineStore('product', {
      * @param costume
      */
     async favorite(costume: Product) {
-      await useApiFetch(`api/bc/customer/${this._product.customerId}/favorites`, {
-        method: 'post',
-        body: costume
-      });
+      await useApiFetch(
+        `/api/bc/customer/${this._product.customerId}/favorites`,
+        {
+          method: "post",
+          body: costume,
+        }
+      );
       // 微妙だけど、いったん再検索
       this.searchProducts();
     },
 
     /**
      * 商品注文登録
-     * @param productId 
+     * @param productId
      */
     async order(productId: number) {
-      return useApiFetch(`api/bc/customer/${this._product.customerId}/orders`, {
-        method: 'post',
-        body: {
-          product_id: productId
+      return useApiFetch(
+        `/api/bc/customer/${this._product.customerId}/orders`,
+        {
+          method: "post",
+          body: {
+            product_id: productId,
+          },
         }
-      });
-    }
+      );
+    },
   },
 
   persist: {
     storage: persistedState.localStorage,
-  }
+  },
 });
