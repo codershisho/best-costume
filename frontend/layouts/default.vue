@@ -90,15 +90,12 @@
 import { useProductStore } from "~/stores/product";
 import { Menu } from "../types/menu";
 
-const urlPathCustomerId = useRoute().params.id;
 const menus = ref<Menu[]>([]);
 const authStore = useAuthStore();
 const productStore = useProductStore();
 // グローバルな商品名検索の商品名格納
 const productName = ref("");
 productStore.clear();
-
-productStore.setCustomerId(Number(urlPathCustomerId));
 searchMenus();
 
 /** メニューの検索 */
@@ -113,13 +110,11 @@ async function searchMenus() {
  */
 function selectCategory(id: number) {
   productStore.setCategory(id);
-  productStore.setCustomerId(Number(urlPathCustomerId));
   productStore.searchProducts();
 }
 
 /** 検索対象の商品名を更新 */
 function updProductName(productName: string) {
-  productStore.setCustomerId(Number(urlPathCustomerId));
   productStore.setProductName(productName);
 }
 </script>
