@@ -55,7 +55,7 @@ class Order extends Controller
 
             TOrder::create([
                 'customer_id' => $id,
-                'product_id' => $request->id,
+                'product_id' => $request->product_id,
             ]);
 
             DB::commit();
