@@ -2,16 +2,16 @@
 export default defineNuxtConfig({
   ssr: false,
   css: [
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css',
-    '~/assets/css/main.css',
+    "vuetify/lib/styles/main.sass",
+    "@mdi/font/css/materialdesignicons.min.css",
+    "~/assets/css/main.css",
   ],
   build: {
-    transpile: ['vuetify'],
+    transpile: ["vuetify"],
   },
   vite: {
     define: {
-      'process.env.DEBUG': false,
+      "process.env.DEBUG": false,
     },
     // for HMR
     server: {
@@ -31,14 +31,13 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+  modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
   pinia: {
-    storesDirs: ['./stores/**'],
+    storesDirs: ["./stores/**"],
   },
   runtimeConfig: {
     public: {
-      baseURL: 'http://localhost:3000',
-      apiBaseURL: 'http://localhost',
+      apiUrl: "",
     },
   },
 });
