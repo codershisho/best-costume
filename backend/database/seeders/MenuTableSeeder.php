@@ -22,6 +22,7 @@ class MenuTableSeeder extends Seeder
             ['name' => 'Womens', 'parent_id' => null, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Boys', 'parent_id' => null, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Girls', 'parent_id' => null, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'ODDO. SELECT', 'parent_id' => null, 'created_at' => now(), 'updated_at' => now()],
 
             ['name' => 'きもの（アンサンブル）', 'parent_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => '男性袴', 'parent_id' => 1, 'created_at' => now(), 'updated_at' => now()],
@@ -60,6 +61,11 @@ class MenuTableSeeder extends Seeder
             ['name' => 'Baby（ドレス）', 'parent_id' => 4, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Baby（着物）', 'parent_id' => 4, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Baby（コスチューム）', 'parent_id' => 4, 'created_at' => now(), 'updated_at' => now()],
+
+            ['name' => 'アンティーク着物（7歳）', 'parent_id' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'アンティーク着物（5歳）', 'parent_id' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'アンティーク着物（3歳）', 'parent_id' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => '帯レンタル', 'parent_id' => 5, 'created_at' => now(), 'updated_at' => now()],
         ];
 
         MMenu::insert($data);
