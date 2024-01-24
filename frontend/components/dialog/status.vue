@@ -73,6 +73,7 @@ async function onSave() {
   } else {
     update();
   }
+  value.value = false;
 }
 
 async function fetchData(url, method, body) {

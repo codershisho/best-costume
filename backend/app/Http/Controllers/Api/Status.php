@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\MStatus;
+use App\Models\TOrder;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +46,29 @@ class Status extends Controller
             DB::commit();
             return response()->json([
                 'message' => 'ステータス更新完了'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            // ステータスを使用しているデータがあるかチェック
+            $orders = TOrder::where('status', $id)->get();
+            if ($orders->count() > 0) {
+                throw new Exception("ステータスが紐づいている注文があるため削除できません。");
+            }
+
+            MStatus::destroy($id);
+
+            DB::commit();
+            return response()->json([
+                'message' => 'ステータス削除完了'
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
