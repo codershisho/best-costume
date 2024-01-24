@@ -73,9 +73,10 @@ async function onSave() {
   } else {
     update();
   }
+  value.value = false;
 }
 
-async function fetchData(url, method, body) {
+async function fetchData(url: string, method: any, body: any) {
   const { data, status, error } = await useApiFetch(url, { method, body });
 
   if (status.value === "success") {

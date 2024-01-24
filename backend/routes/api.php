@@ -62,6 +62,7 @@ Route::prefix('bc')->group(function () {
             Route::get('/', [Status::class, 'index']);
             Route::post('/', [Status::class, 'store']);
             Route::put('/{id}', [Status::class, 'update']);
+            Route::delete('/{id}', [Status::class, 'delete']);
         });
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {

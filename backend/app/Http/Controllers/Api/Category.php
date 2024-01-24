@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FileCategory;
 use Illuminate\Http\Request;
 use App\Models\MCategory;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class Category extends Controller
@@ -55,10 +57,26 @@ class Category extends Controller
         }
     }
 
-    public function destroy(MCategory $mCategory)
+    public function destroy($id)
     {
-        $mCategory->delete();
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['message' => 'Category deleted successfully']);
+            // 紐づいているアルバムのデータがないかチェック
+            $data = FileCategory::where('category_id', $id)->get();
+            if ($data->count() > 0) {
+                throw new Exception('カテゴリーが紐づいているアルバムがあるため削除できません。');
+            }
+
+            MCategory::destroy($id);
+
+            DB::commit();
+            return response()->json([
+                'message' => 'カテゴリー削除完了'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

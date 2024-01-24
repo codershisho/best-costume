@@ -33,14 +33,32 @@
             <th>ID</th>
             <th>ステータス</th>
             <th>ステータスカラー</th>
+            <th>アクション</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(status, i) in statuses" :key="i" @click="onRow(status)">
+          <tr v-for="(status, i) in statuses" :key="i">
             <td>{{ status.id }}</td>
             <td>{{ status.name }}</td>
             <td>
               <v-btn :color="status.color"></v-btn>
+            </td>
+            <td>
+              <div>
+                <v-btn
+                  class="mr-5"
+                  density="compact"
+                  flat
+                  icon="mdi-pencil"
+                  @click="onRow(status)"
+                ></v-btn>
+                <v-btn
+                  density="compact"
+                  flat
+                  icon="mdi-trash-can"
+                  @click="onDelete(status)"
+                ></v-btn>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -64,18 +82,32 @@
             <th>ID</th>
             <th>カテゴリー名</th>
             <th>カテゴリーカラー</th>
+            <th>アクション</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(category, i) in categories"
-            :key="i"
-            @click="onRowCategory(category)"
-          >
+          <tr v-for="(category, i) in categories" :key="i">
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>
               <v-btn :color="category.color"></v-btn>
+            </td>
+            <td>
+              <div>
+                <v-btn
+                  class="mr-5"
+                  density="compact"
+                  flat
+                  icon="mdi-pencil"
+                  @click="onRowCategory(category)"
+                ></v-btn>
+                <v-btn
+                  density="compact"
+                  flat
+                  icon="mdi-trash-can"
+                  @click="onDeleteC(category)"
+                ></v-btn>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -88,6 +120,24 @@
 definePageMeta({
   layout: "admin",
 });
+
+interface Status {
+  id: number;
+  name: string;
+  color: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  color: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null;
+}
 
 const tab = ref("");
 const dialog = ref(false);
@@ -126,6 +176,10 @@ function onRow(status) {
   dialog.value = true;
 }
 
+const onDelete = async (status: Status) => {
+  await deleteStatus(status.id);
+};
+
 function onNewCategory() {
   isInsertCategory.value = true;
   selectedRowCategory.value = {};
@@ -137,4 +191,8 @@ function onRowCategory(category) {
   selectedRowCategory.value = category;
   dialogCategory.value = true;
 }
+
+const onDeleteC = async (category: Category) => {
+  await deleteCategory(category.id);
+};
 </script>
