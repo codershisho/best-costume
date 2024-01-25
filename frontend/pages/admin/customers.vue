@@ -6,25 +6,6 @@
   <div class="mt-2">
     <v-sheet class="mb-3 pl-3 rounded-lg">
       <div class="d-flex tw-items-center">
-        <v-chip-group
-          class="tw-w-4/6 tw-gap-2"
-          color="#E65100"
-          variant="tonal"
-          v-model="selectedStatus"
-          @update:modelValue="filter"
-        >
-          <v-chip
-            v-for="(status, i) in statuses"
-            :key="i"
-            label
-            :value="status.id"
-            class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center"
-          >
-            <div>
-              {{ status.name }}
-            </div>
-          </v-chip>
-        </v-chip-group>
         <base-text
           class="ma-1"
           placeholder="search"
@@ -49,7 +30,6 @@
           <th>顧客</th>
           <th>電話番号</th>
           <th>来店日</th>
-          <th>ステータス</th>
           <th>専用ページ</th>
         </tr>
       </thead>
@@ -60,15 +40,6 @@
           <td>{{ customer.name }}</td>
           <td>{{ customer.phone }}</td>
           <td>{{ customer.visit_date }}</td>
-          <td>
-            <v-chip
-              :color="customer.status_color"
-              label
-              class="tw-w-24 !tw-m-0 tw-items-center tw-justify-center"
-            >
-              {{ customer.status_name }}
-            </v-chip>
-          </td>
           <td>
             <v-icon color="#90A4AE" @click="jump(customer)"
               >mdi-page-next-outline</v-icon
@@ -97,8 +68,6 @@ definePageMeta({
 });
 
 const customers = ref<Customer[]>();
-const statuses = ref();
-const selectedStatus = ref(null);
 const searchText = ref("");
 const page = ref(1);
 const pageLength = ref(1);
@@ -106,7 +75,6 @@ const pageLength = ref(1);
 search();
 
 async function search() {
-  searhStatus();
   searchCustomers();
 }
 
@@ -123,9 +91,6 @@ async function filter() {
   if (searchText.value != "") {
     params.name = searchText.value;
   }
-  if (selectedStatus.value) {
-    params.status_id = selectedStatus.value;
-  }
   const { data } = await useApiFetch(
     `/api/bc/admin/customers/search?page=${page.value}`,
     {
@@ -135,11 +100,6 @@ async function filter() {
   );
   customers.value = data.value.data;
   pageLength.value = data.value.meta.last_page;
-}
-
-async function searhStatus() {
-  const { data } = await useApiFetch("/api/bc/master/statuses");
-  statuses.value = data.value;
 }
 
 function jump(customer: any) {
