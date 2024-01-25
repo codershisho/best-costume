@@ -123,7 +123,7 @@ async function filter() {
   if (searchText.value != "") {
     params.name = searchText.value;
   }
-  if (selectedStatus.value != "" || selectedStatus.value == null) {
+  if (selectedStatus.value) {
     params.status_id = selectedStatus.value;
   }
   const { data } = await useApiFetch(
