@@ -30,7 +30,8 @@
           <th>顧客</th>
           <th>電話番号</th>
           <th>来店日</th>
-          <th>専用ページ</th>
+          <th class="text-center">専用ページ</th>
+          <th class="text-center">編集</th>
         </tr>
       </thead>
       <tbody>
@@ -40,10 +41,13 @@
           <td>{{ customer.name }}</td>
           <td>{{ customer.phone }}</td>
           <td>{{ customer.visit_date }}</td>
-          <td>
+          <td class="text-center">
             <v-icon color="#90A4AE" @click="jump(customer)"
               >mdi-page-next-outline</v-icon
             >
+          </td>
+          <td class="text-center">
+            <v-btn flat icon="mdi-pencil" @click="edit(customer)"></v-btn>
           </td>
         </tr>
       </tbody>
@@ -57,6 +61,11 @@
         @update:modelValue="searchCustomers"
       ></v-pagination>
     </div>
+    <dialog-customer-edit
+      v-model="isEdit"
+      :data="selected"
+      @close="search"
+    ></dialog-customer-edit>
   </div>
 </template>
 
@@ -71,6 +80,8 @@ const customers = ref<Customer[]>();
 const searchText = ref("");
 const page = ref(1);
 const pageLength = ref(1);
+const isEdit = ref(false);
+const selected = ref<Customer | null>(null);
 
 search();
 
@@ -105,6 +116,11 @@ async function filter() {
 function jump(customer: any) {
   navigateTo("/customer/" + customer.id);
 }
+
+const edit = async (customre: Customer) => {
+  selected.value = customre;
+  isEdit.value = true;
+};
 </script>
 
 <style>

@@ -42,6 +42,7 @@ Route::prefix('bc')->group(function () {
             Route::get('/', [Customer::class, 'index']);
             Route::get('/search', [Customer::class, 'search']);
             Route::post('/', [Customer::class, 'store']);
+            Route::put('/{id}', [Customer::class, 'update']);
         });
         Route::prefix('albums')->group(function () {
             Route::get('/uploaded', [Album::class, 'index']);
