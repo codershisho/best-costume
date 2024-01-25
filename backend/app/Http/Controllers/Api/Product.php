@@ -23,6 +23,7 @@ class Product extends Controller
     {
         $customerId = $request->customer_id;
         $query = MProduct::query();
+        $query->orderBy('created_at', 'desc');
         $query = $query->with([
             'site',
             'site.msite',

@@ -14,6 +14,7 @@
           density="compact"
           variant="solo"
           placeholder="衣装名を検索"
+          clearable
           v-model="productName"
           @update:model-value="updProductName"
         >
@@ -95,7 +96,7 @@ const authStore = useAuthStore();
 const productStore = useProductStore();
 // グローバルな商品名検索の商品名格納
 const productName = ref("");
-productStore.clear();
+productName.value = productStore.product.productName;
 searchMenus();
 
 /** メニューの検索 */

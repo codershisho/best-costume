@@ -61,4 +61,27 @@ class Customer extends Controller
             throw $th;
         }
     }
+
+    /**
+     * 顧客情報の更新
+     *
+     * @param [type] $id
+     * @param Request $request
+     * @return void
+     */
+    public function update($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $m = MCustomer::find($id);
+            $m->fill($request->all());
+            $m->save();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
 }
