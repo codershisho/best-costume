@@ -5,8 +5,8 @@
       <v-btn color="primary"> 衣装登録 </v-btn>
     </NuxtLink>
   </div>
-  <div class="d-flex">
-    <div class="tw-w-2/12 mr-5">
+  <div class="d-flex parent">
+    <div class="tw-w-2/12 mr-5 child">
       <CostumeMenus />
     </div>
     <div class="tw-w-10/12">
@@ -104,3 +104,21 @@ async function del() {
   await deleteProducts(ids);
 }
 </script>
+
+<style scoped>
+/* メニューのスクロール対応（長すぎるためスクロールさせる） */
+.parent {
+  height: 89vh;
+  overflow: hidden;
+}
+.child {
+  height: 89vh;
+  overflow-y: auto;
+  /* 以下のプロパティでスクロールバーを非表示に */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.child::-webkit-scrollbar {
+  display: none;
+}
+</style>
