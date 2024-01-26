@@ -20,12 +20,17 @@ export const registProduct = async (model: productTypes.ProductRegist) => {
 
 export const fetchProducts = async (
   text: string = "",
-  page: number = 0
+  page: number = 0,
+  id: number = 0
 ): Promise<productTypes.Product[]> => {
   const params = {};
 
   if (text != "") {
     params.searchText = text;
+  }
+
+  if (id != 0) {
+    params.category = id;
   }
 
   const { data, status, error } = await useApiFetch(
