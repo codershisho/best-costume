@@ -184,7 +184,7 @@ const dragEnd = () => {
 };
 
 const updateOrder = () => {
-  useApiFetch(`api/bc/master/products/update_order`, {
+  useApiFetch(`/api/bc/master/products/update_order`, {
     method: "post",
     body: store.products,
   });
