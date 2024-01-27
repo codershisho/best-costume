@@ -23,7 +23,8 @@ class Product extends Controller
     {
         $customerId = $request->customer_id;
         $query = MProduct::query();
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('sort_order')
+            ->orderBy('created_at', 'desc');
         $query = $query->with([
             'site',
             'site.msite',
@@ -83,6 +84,7 @@ class Product extends Controller
 
             $model = new MProduct();
             $model->fill($request->all());
+            $model->sort_order = 1;
             $model->save();
 
             if ($request->hasFile('files')) {
@@ -106,8 +108,6 @@ class Product extends Controller
 
     public function update($id, Request $request)
     {
-        logger($id);
-        logger($request->all());
         try {
             DB::beginTransaction();
 
@@ -148,6 +148,30 @@ class Product extends Controller
 
             DB::commit();
             return response()->json(['message' => '削除しました']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    /**
+     * 並び順の更新
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function order(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            collect($request->all())->each(function ($product, $index) {
+                $m = MProduct::findOrFail($product['id']);
+                $m->sort_order = $index + 1;
+                $m->save();
+            });
+
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

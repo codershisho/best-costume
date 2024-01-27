@@ -43,7 +43,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, i) in filteredProducts" :key="i">
+          <tr
+            v-for="(product, i) in filteredProducts"
+            :key="i"
+            :draggable="true"
+            @dragstart="dragStart(i)"
+            @dragenter="dragEnter(i)"
+            @dragover.prevent
+            @dragend="dragEnd"
+          >
             <td class="!tw-w-2 !tw-px-2">
               <input type="checkbox" v-model="product.checked" />
             </td>
@@ -89,6 +97,7 @@ const selectAll = ref<boolean | null>(false);
 const isShowDialog = ref(false);
 const filterCriteria = ref(""); // フィルタリング条件を保持する変数
 const { $swal } = useNuxtApp();
+const dragIndex = ref<number | null>(null);
 
 store.searchMenu();
 
@@ -156,6 +165,29 @@ const clickRow = (product: Product) => {
 /** ダイアログが閉じたら再検索 */
 const close = () => {
   store.searchProductsById();
+};
+
+const dragStart = (index: number) => {
+  dragIndex.value = index;
+};
+
+const dragEnter = (index: number) => {
+  if (index === dragIndex.value) return;
+  const deleteElement = store.products.splice(dragIndex.value, 1)[0];
+  store.products.splice(index, 0, deleteElement);
+  dragIndex.value = index;
+};
+
+const dragEnd = () => {
+  updateOrder();
+  dragIndex.value = null;
+};
+
+const updateOrder = () => {
+  useApiFetch(`api/bc/master/products/update_order`, {
+    method: "post",
+    body: store.products,
+  });
 };
 </script>
 

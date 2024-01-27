@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->comment('カテゴリーID');
             $table->integer('price')->comment('価格');
             $table->text('description')->nullable()->comment('商品説明');
+            $table->integer('sort_order')->nullable()->comment('並び順');
             $table->text('note')->nullable()->comment('備考');
             $table->timestamps();
             $table->softDeletes();
