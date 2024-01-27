@@ -35,6 +35,9 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
         // _dataがあり、かつmessageキーを持っている場合
         $showAlert("success", "成功", response._data.message);
       }
+      console.log("-------");
+      console.log(response._data);
+      console.log("-------");
       return response._data;
     },
     onResponseError({ response }) {

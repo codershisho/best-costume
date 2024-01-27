@@ -3,7 +3,7 @@ export const searchScrapeSite = async () => {
 };
 
 export const execScrape = async (siteId: number, url: string) => {
-  await useApiFetch("/api/bc/admin/scrape", {
+  return await useApiFetch("/api/bc/admin/scrape", {
     method: "post",
     body: {
       site_id: siteId,
