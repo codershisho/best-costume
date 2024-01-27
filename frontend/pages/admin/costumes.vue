@@ -74,7 +74,7 @@
       </v-table>
     </div>
   </div>
-  <DialogCostume v-model:open="isShowDialog" />
+  <DialogCostume v-model:open="isShowDialog" @close="close" />
 </template>
 
 <script setup lang="ts">
@@ -138,6 +138,11 @@ const clickRow = (product: Product) => {
   store.editProduct = product;
   store.selectMenu();
   isShowDialog.value = true;
+};
+
+/** ダイアログが閉じたら再検索 */
+const close = () => {
+  store.searchProductsById();
 };
 </script>
 

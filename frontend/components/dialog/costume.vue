@@ -84,7 +84,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:open"]);
+const emit = defineEmits(["update:open", "close"]);
 const valid = ref(false);
 const store = useCostumeStore();
 const requiredValidation = (v: any) => !!v || "必ず入力してください";
@@ -138,5 +138,6 @@ const onSave = async () => {
     body: formData,
   });
   close();
+  emit("close");
 };
 </script>
