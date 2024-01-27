@@ -108,9 +108,6 @@ watch(
       parent.value = store.parentMenu;
       selectedMenu.value = store.selectedMenuId;
     }
-    console.log(
-      `myDataが変更されました。新しい値: ${newValue}, 古い値: ${oldValue}`
-    );
   }
 );
 
@@ -136,12 +133,10 @@ const onSave = async () => {
     formData.append(key, store.editProduct[key]);
   }
 
-  const { data, status, error } = await useApiFetch(
-    `/api/bc/master/products/${store.editProduct?.id}/edit`,
-    {
-      method: "post",
-      body: formData,
-    }
-  );
+  await useApiFetch(`/api/bc/master/products/${store.editProduct?.id}/edit`, {
+    method: "post",
+    body: formData,
+  });
+  close();
 };
 </script>
