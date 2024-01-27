@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'thumbnail' => $this->thumbnail(),
             'favorite' => $this->getFavorite(),
             'site' => $this->site->msite ?? '',
+            'scrape_site' => $this->site,
             'menu' => $this->getMenu(),
             'updated_at' => $this->updated_at->format('Y-m-d'),
         ];

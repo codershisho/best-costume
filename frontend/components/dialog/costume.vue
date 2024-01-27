@@ -49,6 +49,15 @@
             v-model="store.editProduct.description"
             :rules="[requiredValidation]"
           ></v-textarea>
+          <div>
+            <a
+              class="costume-link"
+              :href="store.editProduct.scrape_site.url"
+              target="_blank"
+            >
+              衣装サイト
+            </a>
+          </div>
           <template v-if="store.editProduct.scrape_site_id == 0">
             <p class="mb-3 tw-text-slate-600">商品画像</p>
             <input
@@ -141,3 +150,13 @@ const onSave = async () => {
   emit("close");
 };
 </script>
+
+<style scoped>
+.costume-link {
+  transition: color 0.3s;
+  color: rgb(58, 58, 172);
+}
+.costume-link:hover {
+  color: #ff7043;
+}
+</style>

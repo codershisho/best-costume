@@ -39,14 +39,11 @@
             <th class="!tw-w-1/12 !tw-text-sm">価格</th>
             <th class="!tw-w-1/12 !tw-text-sm">登録日</th>
             <th class="!tw-w-1/12 !tw-text-sm">販売元</th>
+            <th class="!tw-w-1/12 !tw-text-sm">編集</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(product, i) in filteredProducts"
-            :key="i"
-            @click="clickRow(product)"
-          >
+          <tr v-for="(product, i) in filteredProducts" :key="i">
             <td class="!tw-w-2 !tw-px-2">
               <input type="checkbox" v-model="product.checked" />
             </td>
@@ -69,6 +66,9 @@
             <td v-else>
               <v-chip color="warning">{{ product.site.name }}</v-chip>
             </td>
+            <td class="text-center">
+              <v-btn flat icon="mdi-pencil" @click="clickRow(product)"></v-btn>
+            </td>
           </tr>
         </tbody>
       </v-table>
@@ -88,6 +88,7 @@ const store = useCostumeStore();
 const selectAll = ref<boolean | null>(false);
 const isShowDialog = ref(false);
 const filterCriteria = ref(""); // フィルタリング条件を保持する変数
+const { $swal } = useNuxtApp();
 
 store.searchMenu();
 
@@ -129,9 +130,21 @@ async function del() {
 
   if (ids?.length == 0) {
     alert("削除対象を1件以上選択してください。");
+    return;
   }
-
-  await deleteProducts(ids);
+  $swal
+    .fire({
+      title: "削除確認",
+      text: "本当に削除してもいいですか？",
+      icon: "info",
+      showCancelButton: true,
+    })
+    .then((result) => {
+      if (result.value) {
+        deleteProducts(ids);
+        store.searchProductsById();
+      }
+    });
 }
 
 const clickRow = (product: Product) => {
