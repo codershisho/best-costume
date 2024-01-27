@@ -52,7 +52,7 @@ export const useProductStore = defineStore("product", {
         isLikeSearch: this._product.isLikeSearch,
       };
       // グローバルな商品検索の場合は、カテゴリーを除外する
-      if (this._product.productName != "") {
+      if (this._product.productName) {
         params.searchText = this._product.productName;
         delete params.category;
       }
