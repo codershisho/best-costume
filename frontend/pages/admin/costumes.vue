@@ -39,14 +39,11 @@
             <th class="!tw-w-1/12 !tw-text-sm">価格</th>
             <th class="!tw-w-1/12 !tw-text-sm">登録日</th>
             <th class="!tw-w-1/12 !tw-text-sm">販売元</th>
+            <th class="!tw-w-1/12 !tw-text-sm">編集</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(product, i) in filteredProducts"
-            :key="i"
-            @click="clickRow(product)"
-          >
+          <tr v-for="(product, i) in filteredProducts" :key="i">
             <td class="!tw-w-2 !tw-px-2">
               <input type="checkbox" v-model="product.checked" />
             </td>
@@ -68,6 +65,9 @@
             </td>
             <td v-else>
               <v-chip color="warning">{{ product.site.name }}</v-chip>
+            </td>
+            <td class="text-center">
+              <v-btn flat icon="mdi-pencil" @click="clickRow(product)"></v-btn>
             </td>
           </tr>
         </tbody>
