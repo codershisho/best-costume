@@ -95,8 +95,24 @@ const children = computed(() => {
   if (parent.value == null) {
     return [];
   }
-  return store.menus?.[parent.value - 1].children;
+  return store.menus?.find((menu) => menu.id === parent.value)?.children || [];
 });
+
+onMounted(() => {
+  console.log("mounted");
+});
+watch(
+  () => props.open,
+  (newValue, oldValue) => {
+    if (newValue) {
+      parent.value = store.parentMenu;
+      selectedMenu.value = store.selectedMenuId;
+    }
+    console.log(
+      `myDataが変更されました。新しい値: ${newValue}, 古い値: ${oldValue}`
+    );
+  }
+);
 
 const close = () => {
   emit("update:open", false);

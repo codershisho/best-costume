@@ -120,6 +120,7 @@ async function del() {
 
 const clickRow = (product: Product) => {
   store.editProduct = product;
+  store.selectMenu();
   isShowDialog.value = true;
 };
 </script>
