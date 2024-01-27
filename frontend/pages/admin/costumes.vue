@@ -132,6 +132,7 @@ async function del() {
   }
 
   await deleteProducts(ids);
+  store.searchProductsById();
 }
 
 const clickRow = (product: Product) => {
