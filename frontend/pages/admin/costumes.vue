@@ -16,7 +16,7 @@
             class="ma-1"
             placeholder="search"
             clearable
-            v-model="searchText"
+            v-model="filterCriteria"
           ></base-text>
           <v-btn
             class="tw-mx-3"
@@ -43,7 +43,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(product, i) in store.products"
+            v-for="(product, i) in filteredProducts"
             :key="i"
             @click="clickRow(product)"
           >
@@ -85,9 +85,9 @@ definePageMeta({
 });
 
 const store = useCostumeStore();
-const searchText = ref("");
 const selectAll = ref<boolean | null>(false);
 const isShowDialog = ref(false);
+const filterCriteria = ref(""); // フィルタリング条件を保持する変数
 
 store.searchMenu();
 
@@ -104,6 +104,22 @@ watch(
     selectAll.value = allChecked ? true : someChecked ? null : false;
   }
 );
+
+// フィルタリングされた商品リストを計算する
+const filteredProducts = computed(() => {
+  if (!store.products) {
+    return [];
+  }
+  return store.products.filter((product) => {
+    // フィルタリング条件がない場合は全ての商品を表示
+    if (!filterCriteria.value) {
+      return true;
+    }
+
+    // 商品名や他の条件に基づいてフィルタリング
+    return product.name.includes(filterCriteria.value);
+  });
+});
 
 /** 削除 */
 async function del() {
