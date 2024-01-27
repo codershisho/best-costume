@@ -64,20 +64,10 @@ const valid = ref(false);
 const requiredValidation = (v: any) => !!v || "必ず入力してください";
 
 async function onSave() {
-  const { data, status, error } = await useApiFetch(
-    `/api/bc/admin/customers/${props.data.id}`,
-    {
-      method: "put",
-      body: props.data,
-    }
-  );
-
-  if (status.value == "success") {
-    $showAlert("success", "成功", data.value.message);
-  } else if (status.value == "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
+  await useApiFetch(`/api/bc/admin/customers/${props.data.id}`, {
+    method: "put",
+    body: props.data,
+  });
 
   value.value = false;
 }

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { Menu } from "~/types/menu";
-import { Product } from "~/types/product";
+import { Product, ProductRegist } from "~/types/product";
 // import { searchMenus } from "~/composables/menuApi";
 import { fetchProducts, deleteProducts } from "~/composables/productApi";
 
@@ -9,6 +9,7 @@ export const useCostumeStore = defineStore("costume", () => {
   const menus = ref<Menu[] | null>();
   const selectedMenuId = ref(0);
   const products = ref<Product[] | null>();
+  const editProduct = ref<ProductRegist | null>();
 
   const searchMenu = async () => {
     const { data } = await searchMenus();
@@ -28,6 +29,7 @@ export const useCostumeStore = defineStore("costume", () => {
     menus,
     selectedMenuId,
     products,
+    editProduct,
     searchMenu,
     setMenuId,
     searchProductsById,

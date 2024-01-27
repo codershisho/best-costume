@@ -33,24 +33,36 @@
             <th class="!tw-w-2 !tw-px-2">
               <input type="checkbox" v-model="selectAll" />
             </th>
-            <th>衣装ID</th>
-            <th>衣装名</th>
-            <th>サムネイル</th>
-            <th>登録日</th>
-            <th>販売元</th>
+            <th class="!tw-w-1/12 !tw-text-sm">ID</th>
+            <th class="!tw-w-5/12 !tw-text-sm">衣装名</th>
+            <th class="!tw-w-3/12 !tw-text-sm">サムネイル</th>
+            <th class="!tw-w-1/12 !tw-text-sm">価格</th>
+            <th class="!tw-w-1/12 !tw-text-sm">登録日</th>
+            <th class="!tw-w-1/12 !tw-text-sm">販売元</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, i) in store.products" :key="i">
+          <tr
+            v-for="(product, i) in store.products"
+            :key="i"
+            @click="clickRow(product)"
+          >
             <td class="!tw-w-2 !tw-px-2">
               <input type="checkbox" v-model="product.checked" />
             </td>
-            <td>{{ product.id }}</td>
-            <td>{{ product.name }}</td>
+            <td class="!tw-text-sm">{{ product.id }}</td>
+            <td class="!tw-text-sm">{{ product.name }}</td>
             <td>
-              <v-img aspect-ratio="1" contain :src="product.thumbnail"></v-img>
+              <v-img
+                width="200"
+                height="100"
+                aspect-ratio="1"
+                contain
+                :src="product.thumbnail"
+              ></v-img>
             </td>
-            <td>{{ product.updated_at }}</td>
+            <td class="!tw-text-sm">{{ product.price }}</td>
+            <td class="!tw-text-sm">{{ product.updated_at }}</td>
             <td v-if="product.scrape_site_id == 0">
               <v-chip>自社</v-chip>
             </td>
@@ -62,6 +74,7 @@
       </v-table>
     </div>
   </div>
+  <DialogCostume v-model:open="isShowDialog" />
 </template>
 
 <script setup lang="ts">
@@ -74,6 +87,7 @@ definePageMeta({
 const store = useCostumeStore();
 const searchText = ref("");
 const selectAll = ref<boolean | null>(false);
+const isShowDialog = ref(false);
 
 store.searchMenu();
 
@@ -103,6 +117,11 @@ async function del() {
 
   await deleteProducts(ids);
 }
+
+const clickRow = (product: Product) => {
+  store.editProduct = product;
+  isShowDialog.value = true;
+};
 </script>
 
 <style scoped>

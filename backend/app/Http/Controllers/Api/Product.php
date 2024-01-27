@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductEditRequest;
 use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductResource;
 use App\Models\MProduct;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Controller
 {
@@ -102,6 +102,40 @@ class Product extends Controller
             DB::rollBack();
             throw $th;
         }
+    }
+
+    public function update($id, Request $request)
+    {
+        logger($id);
+        logger($request->all());
+        try {
+            DB::beginTransaction();
+
+            $m = MProduct::findOrFail($id);
+            $m->name = $request['name'];
+            $m->category_id = $request['category_id'];
+            $m->price = (int)str_replace(',', '', $request['price']);
+            $m->description = $request['description'];
+            $m->save();
+
+            if ($request->hasFile('files')) {
+                // すでにアップ済みの全画像を削除⇒アップロードされた画像を配置
+                Storage::disk('public')->deleteDirectory('ownProducts/' . $id);
+                $files = $request->file('files');
+                $productId = $id;
+                foreach ($files as $file) {
+                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('public/ownProducts/' . $productId, $fileName);
+                    $filePath = str_replace('public/', '', $filePath);
+                }
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        return response()->json(['message' => '商品更新完了しました']);
     }
 
     public function delete(Request $request)
