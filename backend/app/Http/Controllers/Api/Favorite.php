@@ -43,7 +43,7 @@ class Favorite extends Controller
             }
 
             DB::commit();
-            return response()->json(['message' => '登録しました']);
+            return response()->json(['message' => '']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
