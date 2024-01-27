@@ -88,6 +88,7 @@ const store = useCostumeStore();
 const selectAll = ref<boolean | null>(false);
 const isShowDialog = ref(false);
 const filterCriteria = ref(""); // フィルタリング条件を保持する変数
+const { $swal } = useNuxtApp();
 
 store.searchMenu();
 
@@ -129,10 +130,21 @@ async function del() {
 
   if (ids?.length == 0) {
     alert("削除対象を1件以上選択してください。");
+    return;
   }
-
-  await deleteProducts(ids);
-  store.searchProductsById();
+  $swal
+    .fire({
+      title: "削除確認",
+      text: "本当に削除してもいいですか？",
+      icon: "info",
+      showCancelButton: true,
+    })
+    .then((result) => {
+      if (result.value) {
+        deleteProducts(ids);
+        store.searchProductsById();
+      }
+    });
 }
 
 const clickRow = (product: Product) => {
