@@ -72,6 +72,7 @@ Route::prefix('bc')->group(function () {
             Route::post('/{id}/edit', [Product::class, 'update']);
             Route::post('/', [Product::class, 'store']);
             Route::delete('/', [Product::class, 'delete']);
+            Route::post('/update_order', [Product::class, 'order']);
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);
