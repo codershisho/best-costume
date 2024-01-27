@@ -77,14 +77,7 @@ async function onSave() {
 }
 
 async function fetchData(url: string, method: any, body: any) {
-  const { data, status, error } = await useApiFetch(url, { method, body });
-
-  if (status.value === "success") {
-    $showAlert("success", "成功", data.value.message);
-  } else if (status.value === "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
+  await useApiFetch(url, { method, body });
 }
 
 async function store() {

@@ -57,6 +57,7 @@ class Customer extends Controller
             $m->save();
 
             DB::commit();
+            return response()->json(['message' => '登録しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

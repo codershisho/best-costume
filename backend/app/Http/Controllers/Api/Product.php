@@ -63,7 +63,7 @@ class Product extends Controller
         $data = MProduct::with('site', 'menu.parent')->findOrFail($id);
         return response()->json([
             'data' => new ProductDetailResource($data),
-            'message' => '検索完了しました。'
+            'message' => ''
         ]);
     }
 
@@ -97,7 +97,7 @@ class Product extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => '商品登録完了しました']);
+            return response()->json(['message' => '登録しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -135,7 +135,7 @@ class Product extends Controller
             DB::rollBack();
             throw $th;
         }
-        return response()->json(['message' => '商品更新完了しました']);
+        return response()->json(['message' => '更新しました']);
     }
 
     public function delete(Request $request)
@@ -147,7 +147,7 @@ class Product extends Controller
             MProduct::destroy($ids);
 
             DB::commit();
-            return response()->json(['message' => '商品削除完了しました']);
+            return response()->json(['message' => '削除しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

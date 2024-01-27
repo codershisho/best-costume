@@ -65,7 +65,7 @@ class Category extends Controller
             // 紐づいているアルバムのデータがないかチェック
             $data = FileCategory::where('category_id', $id)->get();
             if ($data->count() > 0) {
-                throw new Exception('カテゴリーが紐づいているアルバムがあるため削除できません。');
+                throw new Exception('カテゴリーが紐づいているアルバムがあるため削除できません');
             }
 
             MCategory::destroy($id);
