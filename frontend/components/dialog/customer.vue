@@ -53,21 +53,13 @@ const valid = ref(false);
 const requiredValidation = (v: any) => !!v || "必ず入力してください";
 
 async function onSave() {
-  const { data, status, error } = await useApiFetch("/api/bc/admin/customers", {
+  await useApiFetch("/api/bc/admin/customers", {
     method: "post",
     body: {
       name: name,
       phone: phone,
     },
   });
-
-  if (status.value == "success") {
-    $showAlert("success", "成功", data.value.message);
-  }else if (status.value == "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
-
   isActive.value = false;
 
   emit("close");

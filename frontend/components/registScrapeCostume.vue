@@ -165,8 +165,10 @@ async function setMenus() {
 /** スクレイプ処理 */
 async function scrape() {
   loading.value = true;
-  const data = await execScrape(Number(selectedSite.value), url.value);
-  stored.value = data?.value.data;
+  const res = await execScrape(Number(selectedSite.value), url.value);
+  console.log(res);
+
+  stored.value = res.data.value.data;
   images.value = stored.value.images.split(",");
   loading.value = false;
   setMenus();

@@ -26,9 +26,7 @@ class Status extends Controller
             $model->save();
 
             DB::commit();
-            return response()->json([
-                'message' => 'ステータス登録完了'
-            ]);
+            return response()->json(['message' => '登録しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -44,9 +42,7 @@ class Status extends Controller
             $model->update($request->all());
 
             DB::commit();
-            return response()->json([
-                'message' => 'ステータス更新完了'
-            ]);
+            return response()->json(['message' => '更新しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -67,9 +63,7 @@ class Status extends Controller
             MStatus::destroy($id);
 
             DB::commit();
-            return response()->json([
-                'message' => 'ステータス削除完了'
-            ]);
+            return response()->json(['message' => '削除しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

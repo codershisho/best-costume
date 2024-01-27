@@ -165,8 +165,7 @@ async function searhStatus() {
  * ステータス更新
  */
 async function updateStatus(order: Order) {
-  console.log(order);
-  const { data, status, error } = await useApiFetch(
+  await useApiFetch(
     `/api/bc/customer/${order.customer_id}/orders/${order.order_id}`,
     {
       method: "put",
@@ -175,12 +174,6 @@ async function updateStatus(order: Order) {
       },
     }
   );
-  if (status.value === "success") {
-    $showAlert("success", "ステータス更新成功", data.value.message);
-  } else if (status.value === "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
 
   searchOrders();
 }

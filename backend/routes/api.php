@@ -69,6 +69,7 @@ Route::prefix('bc')->group(function () {
         Route::prefix('products')->group(function () {
             Route::get('/search', [Product::class, 'search']);
             Route::get('/{id}', [Product::class, 'show']);
+            Route::post('/{id}/edit', [Product::class, 'update']);
             Route::post('/', [Product::class, 'store']);
             Route::delete('/', [Product::class, 'delete']);
         });

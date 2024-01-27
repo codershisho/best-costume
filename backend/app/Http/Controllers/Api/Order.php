@@ -63,9 +63,7 @@ class Order extends Controller
             DB::rollBack();
             throw $th;
         }
-        return response()->json([
-            'message' => '注文登録完了しました'
-        ]);
+        return response()->json(['message' => '登録しました']);
     }
 
     /**
@@ -86,9 +84,7 @@ class Order extends Controller
             $model->save();
 
             DB::commit();
-            return response()->json([
-                'message' => 'ステータス更新完了'
-            ]);
+            return response()->json(['message' => '更新しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

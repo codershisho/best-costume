@@ -14,11 +14,13 @@ class ProductResource extends JsonResource
             'scrape_site_id' => $this->scrape_site_id,
             'name' => $this->name,
             'category_id' => $this->category_id,
+            'price' => number_format($this->price),
+            'description' => $this->description,
             'thumbnail' => $this->thumbnail(),
             'favorite' => $this->getFavorite(),
             'site' => $this->site->msite ?? '',
             'menu' => $this->getMenu(),
-            'updated_at' => $this->updated_at->format('Y-m-d h:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d'),
         ];
     }
 

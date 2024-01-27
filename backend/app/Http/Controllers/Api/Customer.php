@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Models\MCustomer;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +57,7 @@ class Customer extends Controller
             $m->save();
 
             DB::commit();
+            return response()->json(['message' => '登録しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -79,6 +81,7 @@ class Customer extends Controller
             $m->save();
 
             DB::commit();
+            return response()->json(["message" => '更新しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
