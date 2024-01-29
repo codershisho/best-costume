@@ -1,12 +1,12 @@
-import { defineStore } from 'pinia';
-import { useApiFetch } from '~/composables/useApiFetch';
+import { defineStore } from "pinia";
+import { useApiFetch } from "~/composables/useApiFetch";
 
 type Credentials = {
   name?: String;
   password?: String;
 };
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     _isAuth: false,
     _user: null,
@@ -19,30 +19,30 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async login(credentials?: Credentials) {
-      await useApiFetch('/api/sanctum/csrf-cookie');
-      const { data, status } = await useApiFetch('/api/auth/login', {
-        method: 'post',
+      await useApiFetch("/api/sanctum/csrf-cookie");
+      const { data, status } = await useApiFetch("/api/auth/login", {
+        method: "post",
         body: credentials,
       });
 
-      if (status.value === 'success') {
-        const { data, status } = await useApiFetch('/api/user');
-        if (status.value === 'success') {
+      if (status.value === "success") {
+        const { data, status } = await useApiFetch("/api/user");
+        if (status.value === "success") {
           this._isAuth = true;
           this._user = data.value;
-          navigateTo('/admin/home');
+          navigateTo("/admin/customers");
         }
       }
     },
 
     async logout() {
-      const { data, status } = await useApiFetch('/api/auth/logout', {
-        method: 'post',
+      const { data, status } = await useApiFetch("/api/auth/logout", {
+        method: "post",
       });
 
-      if (status.value === 'success') {
+      if (status.value === "success") {
         this.authClear();
-        navigateTo('/login');
+        navigateTo("/login");
       }
     },
 
@@ -54,5 +54,5 @@ export const useAuthStore = defineStore('auth', {
 
   persist: {
     storage: persistedState.localStorage,
-  }
+  },
 });
