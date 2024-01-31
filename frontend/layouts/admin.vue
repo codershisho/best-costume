@@ -36,7 +36,7 @@
 const drawer = ref(null);
 
 const links = [
-  ['mdi-home', 'ホーム', '/admin/home'],
+  // ['mdi-home', 'ホーム', '/admin/home'],
   ['mdi-account-circle-outline', '顧客情報', '/admin/customers'],
   ['mdi-cart-outline', '注文管理', '/admin/orders'],
   ['mdi-hanger', '衣装管理', '/admin/costumes'],

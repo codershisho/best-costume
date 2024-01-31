@@ -4,53 +4,30 @@
       <div class="tw-w-48">
         <img src="/public/oddo_logo.png" />
       </div>
-      <div class="tw-flex tw-w-80 tw-gap-5">
-        <v-text-field
-          class="mr-2"
-          bg-color="white"
-          hide-details
-          prepend-inner-icon="mdi-magnify"
-          single-line
-          density="compact"
-          variant="solo"
-          placeholder="衣装名を検索"
-          v-model="productName"
-          @update:model-value="updProductName"
-        >
+      <div class="tw-flex tw-w-80 tw-gap-4">
+        <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
+          density="compact" variant="solo" placeholder="衣装名を検索" v-model="productName"
+          @update:model-value="updProductName">
         </v-text-field>
 
-        <v-btn
-          width="40px"
-          height="40px"
-          class="heart-color"
-          density="default"
-          icon="mdi-heart"
-          @click="productStore.setIsLikeSearch"
-        ></v-btn>
+        <v-btn width="40px" height="40px" class="heart-color" density="default"
+          :icon="productStore._product.isLikeSearch ? `mdi-heart` : `mdi-heart-outline`"
+          @click="productStore.setIsLikeSearch"></v-btn>
       </div>
     </header>
-    <div class="tw-flex tw-h-full">
-      <div class="tw-flex tw-flex-col tw-w-64 tw-p-5 tw-mx-auto">
+    <div class="tw-flex tw-h-full tw-px-3">
+      <div class="tw-flex tw-flex-col tw-w-80 tw-p-3 tw-mx-auto">
         <div class="tw-flex tw-flex-col tw-gap-4">
-          <h2 class="tw-font-bold tw-text-2xl">Category</h2>
+          <h2 class="tw-font-bold tw-text-xl">Category</h2>
           <v-expansion-panels v-for="(menu, i) in menus">
             <v-expansion-panel bg-color="primary">
-              <v-expansion-panel-title
-                class="tw-font-bold"
-                expand-icon="mdi-plus"
-                collapse-icon="mdi-minus"
-              >
+              <v-expansion-panel-title class="tw-font-bold tw-text-md" expand-icon="mdi-plus" collapse-icon="mdi-minus">
                 {{ menu.name }}
               </v-expansion-panel-title>
               <v-expansion-panel-text class="st_side-menu">
                 <v-list class="tw-w-full !tw-p-0" bg-color="white">
-                  <v-list-item
-                    v-for="(child, i) in menu.children"
-                    key="i"
-                    :value="child.id"
-                    :title="child.name"
-                    @click="selectCategory(child.id)"
-                  >
+                  <v-list-item v-for="(child, i) in menu.children" key="i" :value="child.id" :title="child.name"
+                    @click="selectCategory(child.id)">
                   </v-list-item>
                 </v-list>
               </v-expansion-panel-text>
@@ -59,27 +36,18 @@
         </div>
         <NuxtLink to="/album">
           <div class="tw-mt-6">
-            <h2 class="tw-font-bold tw-text-2xl tw-mb-4">Sample Album</h2>
+            <h2 class="tw-font-bold tw-text-xl tw-mb-4">Sample Album</h2>
             <div>
-              <v-img
-                class="tw-rounded-lg"
-                aspect-ratio="1"
-                cover
-                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-              ></v-img>
+              <v-img class="tw-rounded-lg" aspect-ratio="1" cover
+                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
             </div>
           </div>
         </NuxtLink>
         <div class="tw-text-center tw-mt-auto">
-          <v-btn
-            text="サインアウト"
-            variant="text"
-            prepend-icon="mdi-logout"
-            @click="authStore.logout"
-          />
+          <v-btn text="サインアウト" variant="text" prepend-icon="mdi-logout" @click="authStore.logout" />
         </div>
       </div>
-      <div class="tw-w-full tw-p-6">
+      <div class="tw-w-full tw-p-3">
         <slot />
       </div>
     </div>
@@ -124,11 +92,15 @@ function updProductName(productName: string) {
   display: none;
 }
 
-.st_side-menu > .v-expansion-panel-text__wrapper {
+.st_side-menu>.v-expansion-panel-text__wrapper {
   padding: 0;
 }
 
 .heart-color {
   color: #ff4c24;
+}
+
+.v-list-item-title {
+  font-size: 0.75rem;
 }
 </style>
