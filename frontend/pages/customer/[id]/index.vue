@@ -1,20 +1,20 @@
 <template>
-  <div class="d-flex flex-wrap tw-gap-4">
-    <v-card v-for="costume in costumes" class="!tw-rounded-lg" width="228">
+  <div class="d-flex flex-wrap tw-gap-3">
+    <v-card v-for="costume in costumes" class="!tw-rounded-lg" width="180">
+      <v-btn
+      @click="favorite(costume)"
+      width="40px"
+      height="40px"
+      class="!tw-absolute tw-top-1 tw-left-1 heart-color tw-z-10 tw-scale-75"
+      density="default"
+      :icon="costume.favorite ? `mdi-heart` : `mdi-heart-outline`"
+      ></v-btn>
       <NuxtLink :to="`/customer/${urlPathCustomerId}/item/${costume.id}`">
         <div>
-          <div class="tw-p-4">
+          <div class="tw-p-3">
             <v-img aspect-ratio="1" contain :src="costume.thumbnail"></v-img>
-            <v-btn
-              @click="favorite(costume)"
-              width="40px"
-              height="40px"
-              class="!tw-absolute tw-top-4 tw-left-4 heart-color"
-              density="default"
-              :icon="costume.favorite ? `mdi-heart` : `mdi-heart-outline`"
-            ></v-btn>
           </div>
-          <div class="tw-font-bold tw-p-5">{{ costume.name }}</div>
+          <div class="tw-p-3 tw-text-xs">{{ costume.name }}</div>
         </div>
       </NuxtLink>
     </v-card>
