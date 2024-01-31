@@ -6,7 +6,7 @@
       </div>
       <div class="tw-flex tw-w-80 tw-gap-4">
         <v-text-field class="mr-2" bg-color="white" hide-details prepend-inner-icon="mdi-magnify" single-line
-          density="compact" variant="solo" placeholder="衣装名を検索" v-model="productName"
+          density="compact" variant="solo" placeholder="衣装名を検索" clearable v-model="productName"
           @update:model-value="updProductName">
         </v-text-field>
 
@@ -63,7 +63,7 @@ const authStore = useAuthStore();
 const productStore = useProductStore();
 // グローバルな商品名検索の商品名格納
 const productName = ref("");
-productStore.clear();
+productName.value = productStore.product.productName;
 searchMenus();
 
 /** メニューの検索 */

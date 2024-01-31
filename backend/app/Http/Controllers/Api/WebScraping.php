@@ -35,8 +35,8 @@ class WebScraping extends Controller
         $data = $service->scrape($siteUrl);
 
         return response()->json([
-            'message' => 'データ登録しました。',
-            'data' => $data
+            'data' => $data,
+            'message' => '登録しました'
         ]);
     }
 }

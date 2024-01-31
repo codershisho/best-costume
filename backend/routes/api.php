@@ -42,6 +42,7 @@ Route::prefix('bc')->group(function () {
             Route::get('/', [Customer::class, 'index']);
             Route::get('/search', [Customer::class, 'search']);
             Route::post('/', [Customer::class, 'store']);
+            Route::put('/{id}', [Customer::class, 'update']);
         });
         Route::prefix('albums')->group(function () {
             Route::get('/uploaded', [Album::class, 'index']);
@@ -62,13 +63,16 @@ Route::prefix('bc')->group(function () {
             Route::get('/', [Status::class, 'index']);
             Route::post('/', [Status::class, 'store']);
             Route::put('/{id}', [Status::class, 'update']);
+            Route::delete('/{id}', [Status::class, 'delete']);
         });
         Route::apiResource('categories', Category::class);
         Route::prefix('products')->group(function () {
             Route::get('/search', [Product::class, 'search']);
             Route::get('/{id}', [Product::class, 'show']);
+            Route::post('/{id}/edit', [Product::class, 'update']);
             Route::post('/', [Product::class, 'store']);
             Route::delete('/', [Product::class, 'delete']);
+            Route::post('/update_order', [Product::class, 'order']);
         });
         Route::prefix('menus')->group(function () {
             Route::get('/', [Menu::class, 'index']);

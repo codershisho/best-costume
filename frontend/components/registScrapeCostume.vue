@@ -120,36 +120,46 @@
 import { execScrape } from "~/composables/scrapeApi";
 import { ProductRegist } from "../types/product";
 import { Site, ScrapeResult } from "../types/scrape";
+
 const url = ref("");
 const sites = ref<Site[]>();
 const selectedSite = ref("");
 const loading = ref(false);
-const stored = ref<ScrapeResult>();
+const stored = ref<ScrapeResult | null>();
 const images = ref([]);
-
-const product = ref<ProductRegist>({
+const product: ProductRegist = {
   id: 0,
+  name: "",
+  price: 0,
+  description: "",
   scrape_site_id: 0,
-  name: null,
   category_id: 0,
-  price: null,
-  description: null,
-});
-
+  images: null,
+};
 const menus = ref([]);
 const parent = ref(null);
+const selectedMenu = ref(null);
+const valid = ref(false);
+
+searchSites();
 const children = computed(() => {
   if (parent.value == null) {
     return [];
   }
   return menus.value[parent.value - 1].children;
 });
-const selectedMenu = ref(null);
 
-const valid = ref(false);
 const requiredValidation = (v) => !!v || "必ず入力してください";
 
-searchSites();
+/** 変数初期化 */
+const clearVar = () => {
+  selectedSite.value = "";
+  url.value = "";
+  stored.value = null;
+  images.value = [];
+  parent.value = null;
+  selectedMenu.value = null;
+};
 
 /** プルダウンに表示するサイトリスト検索 */
 async function searchSites() {
@@ -165,8 +175,10 @@ async function setMenus() {
 /** スクレイプ処理 */
 async function scrape() {
   loading.value = true;
-  const data = await execScrape(Number(selectedSite.value), url.value);
-  stored.value = data?.value.data;
+  const res = await execScrape(Number(selectedSite.value), url.value);
+  console.log(res);
+
+  stored.value = res.data.value.data;
   images.value = stored.value.images.split(",");
   loading.value = false;
   setMenus();
@@ -174,11 +186,12 @@ async function scrape() {
 
 /** 商品登録処理 */
 async function onSave() {
-  product.value.name = stored.value.title;
-  product.value.price = Number(stored.value.price);
-  product.value.description = stored.value.description;
-  product.value.scrape_site_id = stored.value.id;
-  product.value.category_id = selectedMenu.value;
-  await registProduct(product.value);
+  product.name = stored.value.title;
+  product.price = Number(stored.value.price);
+  product.description = stored.value.description;
+  product.scrape_site_id = stored.value.id;
+  product.category_id = selectedMenu.value;
+  await registProduct(product);
+  clearVar();
 }
 </script>

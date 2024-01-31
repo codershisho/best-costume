@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductEditRequest;
 use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductResource;
 use App\Models\MProduct;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Controller
 {
@@ -23,6 +23,8 @@ class Product extends Controller
     {
         $customerId = $request->customer_id;
         $query = MProduct::query();
+        $query->orderBy('sort_order')
+            ->orderBy('created_at', 'desc');
         $query = $query->with([
             'site',
             'site.msite',
@@ -62,7 +64,7 @@ class Product extends Controller
         $data = MProduct::with('site', 'menu.parent')->findOrFail($id);
         return response()->json([
             'data' => new ProductDetailResource($data),
-            'message' => '検索完了しました。'
+            'message' => ''
         ]);
     }
 
@@ -82,6 +84,7 @@ class Product extends Controller
 
             $model = new MProduct();
             $model->fill($request->all());
+            $model->sort_order = 1;
             $model->save();
 
             if ($request->hasFile('files')) {
@@ -96,11 +99,43 @@ class Product extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => '商品登録完了しました']);
+            return response()->json(['message' => '登録しました']);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
+    }
+
+    public function update($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $m = MProduct::findOrFail($id);
+            $m->name = $request['name'];
+            $m->category_id = $request['category_id'];
+            $m->price = (int)str_replace(',', '', $request['price']);
+            $m->description = $request['description'];
+            $m->save();
+
+            if ($request->hasFile('files')) {
+                // すでにアップ済みの全画像を削除⇒アップロードされた画像を配置
+                Storage::disk('public')->deleteDirectory('ownProducts/' . $id);
+                $files = $request->file('files');
+                $productId = $id;
+                foreach ($files as $file) {
+                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('public/ownProducts/' . $productId, $fileName);
+                    $filePath = str_replace('public/', '', $filePath);
+                }
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        return response()->json(['message' => '更新しました']);
     }
 
     public function delete(Request $request)
@@ -112,7 +147,31 @@ class Product extends Controller
             MProduct::destroy($ids);
 
             DB::commit();
-            return response()->json(['message' => '商品削除完了しました']);
+            return response()->json(['message' => '削除しました']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    /**
+     * 並び順の更新
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function order(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            collect($request->all())->each(function ($product, $index) {
+                $m = MProduct::findOrFail($product['id']);
+                $m->sort_order = $index + 1;
+                $m->save();
+            });
+
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

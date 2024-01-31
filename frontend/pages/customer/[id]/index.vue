@@ -52,6 +52,11 @@ watch(
   }
 );
 
+onMounted(() => {
+  costumes.value = productStore.product.products;
+  pageLength.value = productStore.product.pageLength;
+});
+
 /** ページ検索 */
 async function search() {
   productStore.setPage(page.value);

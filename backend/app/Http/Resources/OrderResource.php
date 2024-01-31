@@ -17,7 +17,7 @@ class OrderResource extends JsonResource
             'product_id' => $this->product->id,
             'product_name' => $this->product->name,
             'product_price' => $this->product->price,
-            'product_url' => $this->product->site->url,
+            'product_url' => $this->product->site ? $this->product->site->url : null,
             'status_id' => $this->statuss->id,
             'status_name' => $this->statuss->name,
             'status_color' => $this->statuss->color,

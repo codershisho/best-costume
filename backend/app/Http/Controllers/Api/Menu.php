@@ -13,7 +13,7 @@ class Menu extends Controller
         $data = MMenu::with('children')->whereNull('parent_id')->get();
         return response()->json([
             'data' => $data,
-            'message' => '検索完了'
+            'message' => ''
         ]);
     }
 }

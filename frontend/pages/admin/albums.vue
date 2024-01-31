@@ -111,6 +111,7 @@ const albumns = ref([]);
 const page = ref(1);
 const pageLength = ref(1);
 const selectAll = ref<boolean | null>(false);
+const { $swal } = useNuxtApp();
 
 searchCategories();
 searchAlbums();
@@ -197,8 +198,21 @@ async function del() {
 
   if (ids.length == 0) {
     alert("削除対象を1件以上選択してください。");
+    return;
   }
-  await deleteAlbums(ids);
-  searchAlbums();
+
+  $swal
+    .fire({
+      title: "削除確認",
+      text: "本当に削除してもいいですか？",
+      icon: "info",
+      showCancelButton: true,
+    })
+    .then((result) => {
+      if (result.value) {
+        deleteAlbums(ids);
+        searchAlbums();
+      }
+    });
 }
 </script>

@@ -73,17 +73,11 @@ async function onSave() {
   } else {
     update();
   }
+  value.value = false;
 }
 
-async function fetchData(url, method, body) {
-  const { data, status, error } = await useApiFetch(url, { method, body });
-
-  if (status.value === "success") {
-    $showAlert("success", "成功", data.value.message);
-  } else if (status.value === "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
+async function fetchData(url: string, method: any, body: any) {
+  await useApiFetch(url, { method, body });
 }
 
 async function store() {

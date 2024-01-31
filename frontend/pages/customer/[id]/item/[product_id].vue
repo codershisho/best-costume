@@ -90,19 +90,6 @@ async function search() {
  * 衣装の注文
  */
 async function order() {
-  const { data, status, error } = await productStore.order(
-    Number(urlPathProductId)
-  );
-
-  if (status.value == "success") {
-    const message = data.value.message;
-    $showAlert("success", "成功", message);
-    return;
-  }
-
-  if (status.value == "error") {
-    const errMessage = error.value.data.message;
-    $showAlert("error", "失敗", errMessage);
-  }
+  await productStore.order(Number(urlPathProductId));
 }
 </script>
