@@ -8,7 +8,7 @@
           class="rounded-lg tw-bg-white tw-shadow-sm"
           aspect-ratio="1"
           contain
-          :src="detail.images[0]"
+          :src="detail.images[imgNum]"
         ></v-img>
         <div class="tw-grid tw-grid-cols-4 tw-gap-3 tw-mt-4">
           <v-img
@@ -17,25 +17,17 @@
             aspect-ratio="1"
             contain
             :src="image"
+            @click="imgNum = i"
           ></v-img>
         </div>
       </div>
       <div class="tw-flex tw-w-1/2 tw-flex-col tw-justify-between">
         <p>{{ detail.description }}</p>
-        <div class="tw-text-right">
+        <div class="tw-flex tw-justify-between tw-mt-4">
           <p class="tw-font-bold tw-text-xl">{{ detail.price }}</p>
-          <div class="tw-flex tw-justify-between tw-mt-4">
-            <v-btn
-              width="40px"
-              height="40px"
-              class="heart-color"
-              density="default"
-              icon="mdi-heart-outline"
-            ></v-btn>
-            <v-btn class="tw-w-32" color="primary" @click="order">
-              注文する
-            </v-btn>
-          </div>
+          <v-btn class="tw-w-32" color="primary" @click="order">
+            注文する
+          </v-btn>
         </div>
       </div>
     </div>
@@ -63,6 +55,7 @@ const detail = ref<ProductDetail>({
   description: "",
   images: [],
 });
+const imgNum = ref(0);
 
 onMounted(() => {
   // ここにmounted時に実行したい処理を記述
