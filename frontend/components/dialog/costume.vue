@@ -146,6 +146,7 @@ const onSave = async () => {
     method: "post",
     body: formData,
   });
+  await store.searchMenu();
   close();
   emit("close");
 };
