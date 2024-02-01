@@ -49,6 +49,7 @@
           hide-details="auto"
           :rules="[requiredValidation]"
           v-model="parent"
+          @update:model-value="selectedMenu = null"
         />
         <v-select
           class="py-3"

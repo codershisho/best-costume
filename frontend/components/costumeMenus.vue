@@ -9,7 +9,7 @@
         :class="selectedMenu == child.id ? `menu-selected` : ``"
         @click="onClick(child)"
       >
-        {{ child.name }}
+        {{ child.name }}({{ child.count }})
       </div>
     </div>
     <div class="menu-border"></div>
