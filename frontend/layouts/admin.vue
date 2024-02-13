@@ -14,11 +14,25 @@
       </v-list> -->
         <v-list class="tw-flex tw-flex-col tw-items-center tw-gap-6">
           <div class="tw-w-40 tw-pb-10">
-            <img src="/oddo_logo.png">
+            <img src="/oddo_logo.png" />
           </div>
-          <v-list-item v-for="[icon, text, url] in links" :key="icon" :prepend-icon="icon" :title="text" :to="url" link
-            bg-color="primary" class="menu-item !tw-rounded-lg tw-w-44"></v-list-item>
+          <v-list-item
+            v-for="[icon, text, url] in links"
+            :key="icon"
+            :prepend-icon="icon"
+            :title="text"
+            :to="url"
+            link
+            bg-color="primary"
+            class="menu-item !tw-rounded-lg tw-w-44"
+          ></v-list-item>
         </v-list>
+        <v-btn
+          text="サインアウト"
+          variant="text"
+          prepend-icon="mdi-logout"
+          @click="authStore.logout"
+        />
       </div>
       <!-- <v-main class="bg-back !tw-pt-10">
       <v-container>
@@ -33,15 +47,16 @@
 </template>
 
 <script setup lang="ts">
+const authStore = useAuthStore();
 const drawer = ref(null);
 
 const links = [
   // ['mdi-home', 'ホーム', '/admin/home'],
-  ['mdi-account-circle-outline', '顧客情報', '/admin/customers'],
-  ['mdi-cart-outline', '注文管理', '/admin/orders'],
-  ['mdi-hanger', '衣装管理', '/admin/costumes'],
-  ['mdi-image-outline', 'アルバム', '/admin/albums'],
-  ['mdi-cog-outline', '設定', '/admin/settings'],
+  ["mdi-account-circle-outline", "顧客情報", "/admin/customers"],
+  ["mdi-cart-outline", "注文管理", "/admin/orders"],
+  ["mdi-hanger", "衣装管理", "/admin/costumes"],
+  ["mdi-image-outline", "アルバム", "/admin/albums"],
+  ["mdi-cog-outline", "設定", "/admin/settings"],
 ];
 </script>
 

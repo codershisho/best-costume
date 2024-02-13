@@ -30,6 +30,8 @@
           <th>顧客</th>
           <th>電話番号</th>
           <th>来店日</th>
+          <th>ログインID</th>
+          <th>ログインパス</th>
           <th class="text-center">専用ページ</th>
           <th class="text-center">編集</th>
         </tr>
@@ -41,6 +43,8 @@
           <td>{{ customer.name }}</td>
           <td>{{ customer.phone }}</td>
           <td>{{ customer.visit_date }}</td>
+          <td>{{ customer.login_id }}</td>
+          <td>{{ customer.login_pass }}</td>
           <td class="text-center">
             <v-icon color="#90A4AE" @click="jump(customer)"
               >mdi-page-next-outline</v-icon

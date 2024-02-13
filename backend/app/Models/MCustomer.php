@@ -17,4 +17,9 @@ class MCustomer extends Model
     {
         return $this->hasOne('App\Models\MStatus', 'id', 'status_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'customer_id', 'id');
+    }
 }

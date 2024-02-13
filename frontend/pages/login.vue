@@ -38,8 +38,8 @@ type Credentials = {
 const authStore = useAuthStore();
 
 const credentials = ref<Credentials>({
-  name: "admin",
-  password: "hogehoge",
+  name: "",
+  password: "",
 });
 
 async function onLogin() {

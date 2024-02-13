@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Models\MCustomer;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class Customer extends Controller
 {
@@ -18,7 +21,7 @@ class Customer extends Controller
      */
     public function index()
     {
-        $data = MCustomer::with('status')->paginate(10);
+        $data = MCustomer::with(['status', 'user'])->paginate(100);
         return CustomerResource::collection($data);
     }
 
@@ -55,6 +58,23 @@ class Customer extends Controller
             $m = new MCustomer();
             $m->fill($request->all());
             $m->save();
+
+            $customerId = $m->id;
+            $digit = strlen((string)$customerId);
+            $addZero = 5 - $digit;
+            $userName = 'user';
+            for ($i = 0; $i < $addZero; $i++) {
+                $userName = $userName . '0';
+            }
+            $userName = $userName . (string)$customerId;
+
+            $u = new User();
+            $u->name = $userName;
+            $plane = Str::random(6);
+            $u->password = Hash::make($plane);
+            $u->password_plane = $plane;
+            $u->customer_id = $customerId;
+            $u->save();
 
             DB::commit();
             return response()->json(['message' => '登録しました']);

@@ -30,7 +30,12 @@ export const useAuthStore = defineStore("auth", {
         if (status.value === "success") {
           this._isAuth = true;
           this._user = data.value;
-          navigateTo("/admin/customers");
+          const customer_id = this._user.customer_id;
+          if (customer_id == 0) {
+            navigateTo("/admin/customers");
+          } else {
+            navigateTo(`/customer/${customer_id}`);
+          }
         }
       }
     },

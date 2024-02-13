@@ -16,6 +16,8 @@ class CustomerResource extends JsonResource
             'status_id' => $this->status_id,
             'status_name' => $this->status->name,
             'status_color' => $this->status->color,
+            'login_id' => $this->user->name,
+            'login_pass' => $this->user->password_plane,
         ];
     }
 }

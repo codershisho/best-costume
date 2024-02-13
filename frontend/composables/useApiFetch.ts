@@ -32,12 +32,11 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
     ...defaultOptions,
     onResponse({ request, response, options }) {
       if (response._data && response._data.message) {
-        // _dataがあり、かつmessageキーを持っている場合
-        $showAlert("success", "成功", response._data.message);
+        if (response._data.message != "Unauthenticated.") {
+          // _dataがあり、かつmessageキーを持っている場合
+          $showAlert("success", "成功", response._data.message);
+        }
       }
-      console.log("-------");
-      console.log(response._data);
-      console.log("-------");
       return response._data;
     },
     onResponseError({ response }) {
@@ -45,7 +44,7 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
       if ([401, 419].includes(response.status)) {
         const authStore = useAuthStore();
         authStore.authClear();
-        alert("認証切れです。ログイン画面に遷移します。");
+        alert("認証に失敗しました。再度ログインをお願い致します。");
         // ログイン画面への遷移処理はあなたのナビゲーションライブラリによって置き換えてください
         navigateTo("/login");
       } else {
