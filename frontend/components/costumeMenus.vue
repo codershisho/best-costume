@@ -40,7 +40,7 @@ const onClick = (child: any) => {
   border-bottom: 1px solid rgb(224, 224, 224);
 }
 .menu-child {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   padding: 6px;
   color: grey;
 }

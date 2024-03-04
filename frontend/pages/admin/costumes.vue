@@ -27,7 +27,7 @@
           <v-btn color="error" @click="del">削除</v-btn>
         </div>
       </v-sheet>
-      <v-table class="tw-px-2 rounded" height="80vh" fixed-header>
+      <v-table class="tw-px-2 rounded" height="77vh" fixed-header>
         <thead>
           <tr>
             <th class="!tw-w-2 !tw-px-2">
@@ -58,13 +58,7 @@
             <td class="!tw-text-sm">{{ product.id }}</td>
             <td class="!tw-text-sm">{{ product.name }}</td>
             <td>
-              <v-img
-                width="200"
-                height="100"
-                aspect-ratio="1"
-                contain
-                :src="product.thumbnail"
-              ></v-img>
+              <v-img aspect-ratio="1" contain :src="product.thumbnail"></v-img>
             </td>
             <td class="!tw-text-sm">{{ product.price }}</td>
             <td class="!tw-text-sm">{{ product.updated_at }}</td>

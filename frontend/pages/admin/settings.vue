@@ -27,7 +27,7 @@
         :data="selectedRow"
         :isInsert="isInsert"
       ></dialog-status>
-      <v-table class="pa-5 rounded-lg">
+      <v-table class="pa-5 rounded-lg" height="66vh" fixed-header>
         <thead>
           <tr>
             <th>ID</th>
@@ -76,7 +76,7 @@
         :data="selectedRowCategory"
         :isInsert="isInsertCategory"
       ></DialogCategory>
-      <v-table class="pa-5 rounded-lg">
+      <v-table class="pa-5 rounded-lg" height="66vh" fixed-header>
         <thead>
           <tr>
             <th>ID</th>
