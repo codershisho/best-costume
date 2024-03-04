@@ -27,7 +27,7 @@
           <v-btn color="error" @click="del">削除</v-btn>
         </div>
       </v-sheet>
-      <v-table class="tw-px-2 rounded">
+      <v-table class="tw-px-2 rounded" height="80vh" fixed-header>
         <thead>
           <tr>
             <th class="!tw-w-2 !tw-px-2">
