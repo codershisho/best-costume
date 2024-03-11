@@ -49,7 +49,7 @@ class Product extends Controller
                 $q->whereNotNull('id');
             });
         }
-        $data = $query->paginate(50);
+        $data = $query->paginate(100);
         return ProductResource::collection($data);
     }
 

@@ -40,7 +40,7 @@ class Customer extends Controller
         if ($request->has('status_id')) {
             $q->where('status_id', $request->status_id);
         }
-        $data = $q->with('status')->paginate(10);
+        $data = $q->with('status')->paginate(100);
         return CustomerResource::collection($data);
     }
 

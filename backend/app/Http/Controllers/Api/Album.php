@@ -17,7 +17,7 @@ class Album extends Controller
         if ($request->has('category_id') && isset($request->category_id) && $request->category_id != 1) {
             $query->where('category_id', $request->category_id);
         }
-        $data = $query->paginate(10);
+        $data = $query->paginate(100);
         return AlbumResource::collection($data);
     }
 
