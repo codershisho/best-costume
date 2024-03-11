@@ -16,7 +16,8 @@
             class="ma-1"
             placeholder="search"
             clearable
-            v-model="filterCriteria"
+            v-model="searchText"
+            @update:focused="onSearchText"
           ></base-text>
           <v-btn
             class="tw-mx-3"
@@ -44,7 +45,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(product, i) in filteredProducts"
+            v-for="(product, i) in store.products"
             :key="i"
             :draggable="true"
             @dragstart="dragStart(i)"
@@ -77,6 +78,13 @@
     </div>
   </div>
   <DialogCostume v-model:open="isShowDialog" @close="close" />
+  <v-pagination
+    class="text-center"
+    v-model="page"
+    :length="store.pageLength"
+    :total-visible="7"
+    @update:modelValue="search"
+  ></v-pagination>
 </template>
 
 <script setup lang="ts">
@@ -89,9 +97,11 @@ definePageMeta({
 const store = useCostumeStore();
 const selectAll = ref<boolean | null>(false);
 const isShowDialog = ref(false);
-const filterCriteria = ref(""); // フィルタリング条件を保持する変数
+const searchText = ref(""); // フィルタリング条件を保持する変数
 const { $swal } = useNuxtApp();
 const dragIndex = ref<number | null>(null);
+const page = ref<number>(1);
+const pageLength = ref<number>(1);
 
 store.searchMenu();
 
@@ -109,21 +119,13 @@ watch(
   }
 );
 
-// フィルタリングされた商品リストを計算する
-const filteredProducts = computed(() => {
-  if (!store.products) {
-    return [];
-  }
-  return store.products.filter((product) => {
-    // フィルタリング条件がない場合は全ての商品を表示
-    if (!filterCriteria.value) {
-      return true;
-    }
-
-    // 商品名や他の条件に基づいてフィルタリング
-    return product.name.includes(filterCriteria.value);
-  });
-});
+async function onSearchText() {
+  await search();
+  page.value = 1;
+}
+async function search() {
+  store.searchProductsById(searchText, page.value);
+}
 
 /** 削除 */
 async function del() {
@@ -145,7 +147,7 @@ async function del() {
     .then((result) => {
       if (result.value) {
         deleteProducts(ids);
-        store.searchProductsById();
+        search();
       }
     });
 }
@@ -158,7 +160,7 @@ const clickRow = (product: Product) => {
 
 /** ダイアログが閉じたら再検索 */
 const close = () => {
-  store.searchProductsById();
+  search();
 };
 
 const dragStart = (index: number) => {

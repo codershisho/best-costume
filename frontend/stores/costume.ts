@@ -13,6 +13,7 @@ export const useCostumeStore = defineStore("costume", () => {
   const parentMenu = ref(0);
   const childMenus = ref<MenuDetail[] | null>();
   const childMenu = ref(0);
+  const pageLength = ref(0);
 
   const searchMenu = async () => {
     const { data } = await searchMenus();
@@ -23,9 +24,15 @@ export const useCostumeStore = defineStore("costume", () => {
     selectedMenuId.value = id;
   };
 
-  const searchProductsById = async () => {
-    const data = await fetchProducts("", 0, selectedMenuId.value);
-    products.value = data.data;
+  const searchProductsById = async (text: string = "", page: number = 0) => {
+    const { data, status, error } = await fetchProducts(
+      text,
+      page,
+      selectedMenuId.value
+    );
+
+    products.value = data.value.data;
+    pageLength.value = data.value.meta.last_page;
   };
 
   const selectMenu = async () => {
@@ -58,5 +65,6 @@ export const useCostumeStore = defineStore("costume", () => {
     searchProductsById,
     selectMenu,
     setChildMenus,
+    pageLength,
   };
 });

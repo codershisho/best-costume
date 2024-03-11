@@ -22,14 +22,10 @@ export const fetchProducts = async (
     params.category = id;
   }
 
-  const { data, status, error } = await useApiFetch(
-    `/api/bc/master/products/search?page=${page}`,
-    {
-      method: "get",
-      params: params,
-    }
-  );
-  return data.value as productTypes.Product[];
+  return await useApiFetch(`/api/bc/master/products/search?page=${page}`, {
+    method: "get",
+    params: params,
+  });
 };
 
 export const deleteProducts = async (ids: Array<number>) => {
